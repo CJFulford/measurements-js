@@ -1,4 +1,5 @@
 import LengthUnit from "./LengthUnit";
+import AbstractArea from "./AbstractArea";
 
 export type LengthArg = AbstractLength | number;
 export type UnitArg = LengthUnit | number;
@@ -56,4 +57,9 @@ export default abstract class AbstractLength {
     abstract sub(length: AbstractLength): AbstractLength;
     abstract sub(length: number, unit: UnitArg): AbstractLength;
     abstract sub(length: LengthArg, unit: UnitArg): AbstractLength;
+
+    abstract mul(value: AbstractLength): AbstractArea;
+    abstract mul(value: number, unit: UnitArg): AbstractArea;
+    abstract mul(value: number): AbstractLength;
+    abstract mul(value: LengthArg, unit?: UnitArg): AbstractLength | AbstractArea;
 }

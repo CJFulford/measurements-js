@@ -22,4 +22,8 @@ export default class AreaImmutable extends AbstractArea {
         area = area instanceof AbstractArea ? area : new AreaImmutable(area, unit as AreaUnit);
         return new AreaImmutable(this.value - area.getValue(this.unit), this.unit);
     }
+
+    mul(value: number): AreaImmutable {
+        return new AreaImmutable(this.value * value, this.unit);
+    }
 }

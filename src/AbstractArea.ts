@@ -58,4 +58,5 @@ export default abstract class AbstractArea {
     abstract sub(area: number, unit: AreaUnit | number): AbstractArea;
     abstract sub(area: AbstractArea | number, unit: null | AreaUnit | number): AbstractArea;
 
+    abstract mul(value: number): AbstractArea;
 }

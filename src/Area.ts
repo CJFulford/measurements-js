@@ -23,4 +23,9 @@ export default class Area extends AbstractArea {
         this.value -= area.getValue(this.unit);
         return this;
     }
+
+    mul(value: number): Area {
+        this.value *= value;
+        return this;
+    }
 }

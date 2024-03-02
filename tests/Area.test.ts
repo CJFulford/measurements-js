@@ -20,3 +20,10 @@ test('Subtraction', () => {
     area2.sub(3, AreaUnit.SQUARE_METRE);
     expect(area2.squareMetres).toBe(2);
 });
+
+test('Multiplication', () => {
+    const area1 = new Area(5, AreaUnit.SQUARE_METRE);
+    const area2 = area1.mul(3);
+    expect(area1.squareMetres).toBe(15);
+    expect(area2.squareMetres).toBe(15);
+});

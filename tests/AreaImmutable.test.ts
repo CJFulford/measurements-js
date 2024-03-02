@@ -24,3 +24,10 @@ test('Subtraction', () => {
     expect(area3.squareMetres).toBe(5);
     expect(area4.squareMetres).toBe(2);
 });
+
+test('Multiplication', () => {
+    const area1 = new AreaImmutable(5, AreaUnit.SQUARE_METRE);
+    const area2 = area1.mul(3);
+    expect(area1.squareMetres).toBe(5);
+    expect(area2.squareMetres).toBe(15);
+});
