@@ -1,14 +1,22 @@
 import Length from "../src/Length";
 import LengthUnit from "../src/LengthUnit";
 
-test('Add 2 Objects', () => {
-    const length = new Length(1, LengthUnit.METRE);
-    length.add(new Length(1, LengthUnit.METRE));
-    expect(length.metres).toBe(2);
+test('Addition', () => {
+    const length1 = new Length(1, LengthUnit.METRE);
+    length1.add(new Length(1, LengthUnit.METRE));
+    expect(length1.metres).toBe(2);
+
+    const length2 = new Length(1, LengthUnit.METRE);
+    length2.add(1, LengthUnit.METRE);
+    expect(length2.metres).toBe(2);
 });
 
-test('Add object with arguments', () => {
-    const length = new Length(1, LengthUnit.METRE);
-    length.add(1, LengthUnit.METRE);
-    expect(length.metres).toBe(2);
+test('Subtraction', () => {
+    const length1 = new Length(5, LengthUnit.METRE);
+    length1.sub(new Length(3, LengthUnit.METRE));
+    expect(length1.metres).toBe(2);
+
+    const length2 = new Length(5, LengthUnit.METRE);
+    length2.sub(3, LengthUnit.METRE);
+    expect(length2.metres).toBe(2);
 });

@@ -52,4 +52,8 @@ export default abstract class AbstractLength {
     abstract add(length: AbstractLength): AbstractLength;
     abstract add(length: number, unit: UnitArg): AbstractLength;
     abstract add(length: LengthArg, unit: UnitArg): AbstractLength;
+
+    abstract sub(length: AbstractLength): AbstractLength;
+    abstract sub(length: number, unit: UnitArg): AbstractLength;
+    abstract sub(length: LengthArg, unit: UnitArg): AbstractLength;
 }

@@ -14,4 +14,13 @@ export default class Area extends AbstractArea {
         this.value += area.getValue(this.unit);
         return this;
     }
+
+    sub(area: AbstractArea): Area;
+    sub(area: number, unit: UnitArg): Area;
+    sub(area: AreaArg, unit?: UnitArg): Area {
+        // convert the area to an Area if it is not already
+        area = area instanceof AbstractArea ? area : new Area(area, unit as AreaUnit);
+        this.value -= area.getValue(this.unit);
+        return this;
+    }
 }

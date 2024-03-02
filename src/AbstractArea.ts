@@ -54,4 +54,8 @@ export default abstract class AbstractArea {
     abstract add(area: number, unit: AreaUnit | number): AbstractArea;
     abstract add(area: AbstractArea | number, unit: null | AreaUnit | number): AbstractArea;
 
+    abstract sub(area: AbstractArea): AbstractArea;
+    abstract sub(area: number, unit: AreaUnit | number): AbstractArea;
+    abstract sub(area: AbstractArea | number, unit: null | AreaUnit | number): AbstractArea;
+
 }
