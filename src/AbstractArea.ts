@@ -90,4 +90,25 @@ export default abstract class AbstractArea {
     abstract isGreaterThanOrEqualTo(area: AbstractArea): boolean;
     abstract isGreaterThanOrEqualTo(area: number, unit: number): boolean;
     abstract isGreaterThanOrEqualTo(area: AreaArg, unit?: UnitArg): boolean;
+
+    format(decimals: number, unit: UnitArg, type: "name" | "acronym" = "acronym"): string {
+        const numeral = require('numeral');
+        const number = numeral(this.getValue(unit)).format();
+
+        unit = unit instanceof AreaUnit ? unit : AreaUnit.getById(unit as number);
+
+        let suffix;
+        switch (type) {
+            case "name":
+                suffix = ' ' + (this.isEqualTo(1, unit) ? unit.name : unit.pluralName);
+                break;
+            case "acronym":
+                suffix = unit.acronym;
+                break;
+            default:
+                throw new Error("Invalid format type");
+        }
+
+        return `${number}${suffix}`;
+    }
 }

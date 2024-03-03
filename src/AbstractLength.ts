@@ -89,4 +89,28 @@ export default abstract class AbstractLength {
     abstract isGreaterThanOrEqualTo(length: AbstractLength): boolean;
     abstract isGreaterThanOrEqualTo(length: number, unit: number): boolean;
     abstract isGreaterThanOrEqualTo(length: LengthArg, unit?: UnitArg): boolean;
+
+    format(decimals: number, unit: UnitArg, type: "name" | "acronym" | "symbol" = "acronym"): string {
+        const numeral = require('numeral');
+        const number = numeral(this.getValue(unit)).format();
+
+        unit = unit instanceof LengthUnit ? unit : LengthUnit.getById(unit as number);
+
+        let suffix;
+        switch (type) {
+            case "name":
+                suffix = ' ' + (this.isEqualTo(1, unit) ? unit.name : unit.pluralName);
+                break;
+            case "acronym":
+                suffix = unit.acronym;
+                break;
+            case "symbol":
+                suffix = unit.symbol;
+                break;
+            default:
+                throw new Error("Invalid format type");
+        }
+
+        return `${number}${suffix}`;
+    }
 }
