@@ -69,4 +69,24 @@ export default abstract class AbstractLength {
     abstract divByLength(length: AbstractLength): number;
     abstract divByLength(length: number, unit: UnitArg): number;
     abstract divByLength(length: LengthArg, unit?: UnitArg): number;
+
+    abstract isEqualTo(length: AbstractLength): boolean;
+    abstract isEqualTo(length: number, unit: number): boolean;
+    abstract isEqualTo(length: LengthArg, unit?: UnitArg): boolean;
+
+    abstract isLessThan(length: AbstractLength): boolean;
+    abstract isLessThan(length: number, unit: number): boolean;
+    abstract isLessThan(length: LengthArg, unit?: UnitArg): boolean;
+
+    abstract isLessThanOrEqualTo(length: AbstractLength): boolean;
+    abstract isLessThanOrEqualTo(length: number, unit: number): boolean;
+    abstract isLessThanOrEqualTo(length: LengthArg, unit?: UnitArg): boolean;
+
+    abstract isGreaterThan(length: AbstractLength): boolean;
+    abstract isGreaterThan(length: number, unit: number): boolean;
+    abstract isGreaterThan(length: LengthArg, unit?: UnitArg): boolean;
+
+    abstract isGreaterThanOrEqualTo(length: AbstractLength): boolean;
+    abstract isGreaterThanOrEqualTo(length: number, unit: number): boolean;
+    abstract isGreaterThanOrEqualTo(length: LengthArg, unit?: UnitArg): boolean;
 }

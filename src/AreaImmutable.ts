@@ -3,6 +3,7 @@ import AreaUnit from "./AreaUnit";
 import AbstractLength, {LengthArg, UnitArg as LengthUnitArg} from "./AbstractLength";
 import LengthUnit from "./LengthUnit";
 import LengthImmutable from "./LengthImmutable";
+import {floatsEqual} from "./Helpers";
 
 export default class AreaImmutable extends AbstractArea {
 
@@ -48,5 +49,45 @@ export default class AreaImmutable extends AbstractArea {
         return area instanceof AbstractArea
             ? this.squareMetres / area.squareMetres
             : this.divByArea(new AreaImmutable(area, unit as AreaUnit));
+    }
+
+    isEqualTo(area: AbstractArea): boolean;
+    isEqualTo(area: number, unit: number): boolean;
+    isEqualTo(area: AreaArg, unit?: UnitArg): boolean {
+        return area instanceof AbstractArea
+            ? floatsEqual(this.squareMetres, area.squareMetres)
+            : this.isEqualTo(new AreaImmutable(area, unit as UnitArg));
+    }
+
+    isLessThan(area: AbstractArea): boolean;
+    isLessThan(area: number, unit: number): boolean;
+    isLessThan(area: AreaArg, unit?: UnitArg): boolean {
+        return area instanceof AbstractArea
+            ? this.squareMetres < area.squareMetres
+            : this.isLessThan(new AreaImmutable(area, unit as UnitArg));
+    }
+
+    isLessThanOrEqualTo(area: AbstractArea): boolean;
+    isLessThanOrEqualTo(area: number, unit: number): boolean;
+    isLessThanOrEqualTo(area: AreaArg, unit?: UnitArg): boolean {
+        return area instanceof AbstractArea
+            ? this.isLessThan(area) || this.isEqualTo(area)
+            : this.isLessThanOrEqualTo(new AreaImmutable(area, unit as UnitArg));
+    }
+
+    isGreaterThan(area: AbstractArea): boolean;
+    isGreaterThan(area: number, unit: number): boolean;
+    isGreaterThan(area: AreaArg, unit?: UnitArg): boolean {
+        return area instanceof AbstractArea
+            ? this.squareMetres > area.squareMetres
+            : this.isGreaterThan(new AreaImmutable(area, unit as UnitArg));
+    }
+
+    isGreaterThanOrEqualTo(area: AbstractArea): boolean;
+    isGreaterThanOrEqualTo(area: number, unit: number): boolean;
+    isGreaterThanOrEqualTo(area: AreaArg, unit?: UnitArg): boolean {
+        return area instanceof AbstractArea
+            ? this.isGreaterThan(area) || this.isEqualTo(area)
+            : this.isGreaterThanOrEqualTo(new AreaImmutable(area, unit as UnitArg));
     }
 }

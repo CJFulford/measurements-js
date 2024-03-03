@@ -2,6 +2,7 @@ import AbstractLength, {LengthArg, UnitArg} from "./AbstractLength";
 import LengthUnit from "./LengthUnit";
 import AreaUnit from "./AreaUnit";
 import AreaImmutable from "./AreaImmutable";
+import {floatsEqual} from "./Helpers";
 
 export default class LengthImmutable extends AbstractLength {
 
@@ -49,5 +50,45 @@ export default class LengthImmutable extends AbstractLength {
         return length instanceof AbstractLength
             ? this.metres / length.metres
             : this.divByLength(new LengthImmutable(length, unit as UnitArg));
+    }
+
+    isEqualTo(length: AbstractLength): boolean;
+    isEqualTo(length: number, unit: number): boolean;
+    isEqualTo(length: LengthArg, unit?: UnitArg): boolean {
+        return length instanceof AbstractLength
+            ? floatsEqual(this.metres, length.metres)
+            : this.isEqualTo(new LengthImmutable(length, unit as UnitArg));
+    }
+
+    isLessThan(length: AbstractLength): boolean;
+    isLessThan(length: number, unit: number): boolean;
+    isLessThan(length: LengthArg, unit?: UnitArg): boolean {
+        return length instanceof AbstractLength
+            ? this.metres < length.metres
+            : this.isLessThan(new LengthImmutable(length, unit as UnitArg));
+    }
+
+    isLessThanOrEqualTo(length: AbstractLength): boolean;
+    isLessThanOrEqualTo(length: number, unit: number): boolean;
+    isLessThanOrEqualTo(length: LengthArg, unit?: UnitArg): boolean {
+        return length instanceof AbstractLength
+            ? this.isLessThan(length) || this.isEqualTo(length)
+            : this.isLessThanOrEqualTo(new LengthImmutable(length, unit as UnitArg));
+    }
+
+    isGreaterThan(length: AbstractLength): boolean;
+    isGreaterThan(length: number, unit: number): boolean;
+    isGreaterThan(length: LengthArg, unit?: UnitArg): boolean {
+        return length instanceof AbstractLength
+            ? this.metres > length.metres
+            : this.isGreaterThan(new LengthImmutable(length, unit as UnitArg));
+    }
+
+    isGreaterThanOrEqualTo(length: AbstractLength): boolean;
+    isGreaterThanOrEqualTo(length: number, unit: number): boolean;
+    isGreaterThanOrEqualTo(length: LengthArg, unit?: UnitArg): boolean {
+        return length instanceof AbstractLength
+            ? this.isGreaterThan(length) || this.isEqualTo(length)
+            : this.isGreaterThanOrEqualTo(new LengthImmutable(length, unit as UnitArg));
     }
 }

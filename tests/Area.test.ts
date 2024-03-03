@@ -72,3 +72,103 @@ test('Division By Area', () => {
     expect(area2.squareMetres).toBe(15);
     expect(value2).toBe(5);
 });
+
+test('Is Equal To', () => {
+    const area1 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area2 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area3 = new Area(20, AreaUnit.SQUARE_METRE);
+    expect(area1.isEqualTo(area2)).toBe(true);
+    expect(area1.isEqualTo(area3)).toBe(false);
+});
+
+test('Is Less Than', () => {
+    const area1 = new Area(10, AreaUnit.SQUARE_METRE);
+    const area2 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area3 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area4 = new Area(20, AreaUnit.SQUARE_METRE);
+
+    expect(area1.isLessThan(area2)).toBe(true);
+    expect(area1.isLessThan(area3)).toBe(true);
+    expect(area1.isLessThan(area4)).toBe(true);
+
+    expect(area2.isLessThan(area1)).toBe(false);
+    expect(area2.isLessThan(area3)).toBe(false);
+    expect(area2.isLessThan(area4)).toBe(true);
+
+    expect(area3.isLessThan(area1)).toBe(false);
+    expect(area3.isLessThan(area2)).toBe(false);
+    expect(area3.isLessThan(area4)).toBe(true);
+
+    expect(area4.isLessThan(area1)).toBe(false);
+    expect(area4.isLessThan(area2)).toBe(false);
+    expect(area4.isLessThan(area3)).toBe(false);
+});
+
+test('Is Less Than Or Equal To', () => {
+    const area1 = new Area(10, AreaUnit.SQUARE_METRE);
+    const area2 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area3 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area4 = new Area(20, AreaUnit.SQUARE_METRE);
+
+    expect(area1.isLessThanOrEqualTo(area2)).toBe(true);
+    expect(area1.isLessThanOrEqualTo(area3)).toBe(true);
+    expect(area1.isLessThanOrEqualTo(area4)).toBe(true);
+
+    expect(area2.isLessThanOrEqualTo(area1)).toBe(false);
+    expect(area2.isLessThanOrEqualTo(area3)).toBe(true);
+    expect(area2.isLessThanOrEqualTo(area4)).toBe(true);
+
+    expect(area3.isLessThanOrEqualTo(area1)).toBe(false);
+    expect(area3.isLessThanOrEqualTo(area2)).toBe(true);
+    expect(area3.isLessThanOrEqualTo(area4)).toBe(true);
+
+    expect(area4.isLessThanOrEqualTo(area1)).toBe(false);
+    expect(area4.isLessThanOrEqualTo(area2)).toBe(false);
+    expect(area4.isLessThanOrEqualTo(area3)).toBe(false);
+});
+
+test('Is Greater Than', () => {
+    const area1 = new Area(10, AreaUnit.SQUARE_METRE);
+    const area2 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area3 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area4 = new Area(20, AreaUnit.SQUARE_METRE);
+
+    expect(area1.isGreaterThan(area2)).toBe(false);
+    expect(area1.isGreaterThan(area3)).toBe(false);
+    expect(area1.isGreaterThan(area4)).toBe(false);
+
+    expect(area2.isGreaterThan(area1)).toBe(true);
+    expect(area2.isGreaterThan(area3)).toBe(false);
+    expect(area2.isGreaterThan(area4)).toBe(false);
+
+    expect(area3.isGreaterThan(area1)).toBe(true);
+    expect(area3.isGreaterThan(area2)).toBe(false);
+    expect(area3.isGreaterThan(area4)).toBe(false);
+
+    expect(area4.isGreaterThan(area1)).toBe(true);
+    expect(area4.isGreaterThan(area2)).toBe(true);
+    expect(area4.isGreaterThan(area3)).toBe(true);
+});
+
+test('Is Greater Than Or Equal To', () => {
+    const area1 = new Area(10, AreaUnit.SQUARE_METRE);
+    const area2 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area3 = new Area(15, AreaUnit.SQUARE_METRE);
+    const area4 = new Area(20, AreaUnit.SQUARE_METRE);
+
+    expect(area1.isGreaterThanOrEqualTo(area2)).toBe(false);
+    expect(area1.isGreaterThanOrEqualTo(area3)).toBe(false);
+    expect(area1.isGreaterThanOrEqualTo(area4)).toBe(false);
+
+    expect(area2.isGreaterThanOrEqualTo(area1)).toBe(true);
+    expect(area2.isGreaterThanOrEqualTo(area3)).toBe(true);
+    expect(area2.isGreaterThanOrEqualTo(area4)).toBe(false);
+
+    expect(area3.isGreaterThanOrEqualTo(area1)).toBe(true);
+    expect(area3.isGreaterThanOrEqualTo(area2)).toBe(true);
+    expect(area3.isGreaterThanOrEqualTo(area4)).toBe(false);
+
+    expect(area4.isGreaterThanOrEqualTo(area1)).toBe(true);
+    expect(area4.isGreaterThanOrEqualTo(area2)).toBe(true);
+    expect(area4.isGreaterThanOrEqualTo(area3)).toBe(true);
+});

@@ -70,4 +70,24 @@ export default abstract class AbstractArea {
     abstract divByArea(area: AbstractArea): number;
     abstract divByArea(area: number, unit: UnitArg): number;
     abstract divByArea(area: AreaArg, unit?: UnitArg): number;
+
+    abstract isEqualTo(area: AbstractArea): boolean;
+    abstract isEqualTo(area: number, unit: number): boolean;
+    abstract isEqualTo(area: AreaArg, unit?: UnitArg): boolean;
+
+    abstract isLessThan(area: AbstractArea): boolean;
+    abstract isLessThan(area: number, unit: number): boolean;
+    abstract isLessThan(area: AreaArg, unit?: UnitArg): boolean;
+
+    abstract isLessThanOrEqualTo(area: AbstractArea): boolean;
+    abstract isLessThanOrEqualTo(area: number, unit: number): boolean;
+    abstract isLessThanOrEqualTo(area: AreaArg, unit?: UnitArg): boolean;
+
+    abstract isGreaterThan(area: AbstractArea): boolean;
+    abstract isGreaterThan(area: number, unit: number): boolean;
+    abstract isGreaterThan(area: AreaArg, unit?: UnitArg): boolean;
+
+    abstract isGreaterThanOrEqualTo(area: AbstractArea): boolean;
+    abstract isGreaterThanOrEqualTo(area: number, unit: number): boolean;
+    abstract isGreaterThanOrEqualTo(area: AreaArg, unit?: UnitArg): boolean;
 }
