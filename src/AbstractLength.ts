@@ -52,14 +52,21 @@ export default abstract class AbstractLength {
 
     abstract add(length: AbstractLength): AbstractLength;
     abstract add(length: number, unit: UnitArg): AbstractLength;
-    abstract add(length: LengthArg, unit: UnitArg): AbstractLength;
+    abstract add(length: LengthArg, unit?: UnitArg): AbstractLength;
 
     abstract sub(length: AbstractLength): AbstractLength;
     abstract sub(length: number, unit: UnitArg): AbstractLength;
-    abstract sub(length: LengthArg, unit: UnitArg): AbstractLength;
+    abstract sub(length: LengthArg, unit?: UnitArg): AbstractLength;
 
-    abstract mul(value: AbstractLength): AbstractArea;
-    abstract mul(value: number, unit: UnitArg): AbstractArea;
-    abstract mul(value: number): AbstractLength;
-    abstract mul(value: LengthArg, unit?: UnitArg): AbstractLength | AbstractArea;
+    abstract mulByNumber(value: number): AbstractLength;
+
+    abstract mulByLength(length: AbstractLength): AbstractArea;
+    abstract mulByLength(length: number, unit: UnitArg): AbstractArea;
+    abstract mulByLength(length: LengthArg, unit?: UnitArg): AbstractArea;
+
+    abstract divByNumber(value: number): AbstractLength;
+
+    abstract divByLength(length: AbstractLength): number;
+    abstract divByLength(length: number, unit: UnitArg): number;
+    abstract divByLength(length: LengthArg, unit?: UnitArg): number;
 }

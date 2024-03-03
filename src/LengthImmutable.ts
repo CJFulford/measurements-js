@@ -27,20 +27,27 @@ export default class LengthImmutable extends AbstractLength {
         return new LengthImmutable(value, this.unit);
     }
 
-    mul(value: AbstractLength): AreaImmutable;
-    mul(value: number, unit: UnitArg): AreaImmutable;
-    mul(value: number): LengthImmutable;
-    mul(value: LengthArg, unit?: UnitArg): LengthImmutable | AreaImmutable {
-        // a length multiplied by a length is an area
-        if (value instanceof AbstractLength) {
-            return new AreaImmutable(this.metres * value.metres, AreaUnit.SQUARE_METRE);
-        }
-        // sale as the first statement, but with length constructor arguments instead of a length instance
-        else if (unit !== undefined) {
-            return this.mul(new LengthImmutable(value, unit));
-        }
-
-        // a length multiplied by a number is a length
+    mulByNumber(value: number): LengthImmutable {
         return new LengthImmutable(this.value * value, this.unit);
+    };
+
+    mulByLength(length: AbstractLength): AreaImmutable;
+    mulByLength(length: number, unit: UnitArg): AreaImmutable;
+    mulByLength(length: LengthArg, unit?: UnitArg): AreaImmutable {
+        return length instanceof AbstractLength
+            ? new AreaImmutable(this.metres * length.metres, AreaUnit.SQUARE_METRE)
+            : this.mulByLength(new LengthImmutable(length, unit as UnitArg));
+    }
+
+    divByNumber(value: number): LengthImmutable {
+        return new LengthImmutable(this.value / value, this.unit);
+    }
+
+    divByLength(length: AbstractLength): number;
+    divByLength(length: number, unit: UnitArg): number;
+    divByLength(length: LengthArg, unit?: UnitArg): number {
+        return length instanceof AbstractLength
+            ? this.metres / length.metres
+            : this.divByLength(new LengthImmutable(length, unit as UnitArg));
     }
 }

@@ -3,7 +3,6 @@ import LengthUnit from "./LengthUnit";
 import Area from "./Area";
 import AreaUnit from "./AreaUnit";
 
-
 export default class Length extends AbstractLength {
 
     constructor(value: number, unit: UnitArg) {
@@ -28,21 +27,31 @@ export default class Length extends AbstractLength {
         return this;
     }
 
-    mul(value: AbstractLength): Area;
-    mul(value: number, unit: UnitArg): Area;
-    mul(value: number): Length;
-    mul(value: LengthArg, unit?: UnitArg): Length | Area {
-        // a length multiplied by a length is an area
-        if (value instanceof AbstractLength) {
-            return new Area(this.metres * value.metres, AreaUnit.SQUARE_METRE);
-        }
-        // sale as the first statement, but with length constructor arguments instead of a length instance
-        else if (unit !== undefined) {
-            return this.mul(new Length(value, unit));
-        }
-
-        // a length multiplied by a number is a length
+    mulByNumber(value: number): Length {
         this.value *= value;
         return this;
+    };
+
+    mulByLength(length: AbstractLength): Area;
+    mulByLength(length: number, unit: UnitArg): Area;
+    mulByLength(length: LengthArg, unit?: UnitArg): Area {
+        return length instanceof AbstractLength
+            ? new Area(this.metres * length.metres, AreaUnit.SQUARE_METRE)
+            : this.mulByLength(new Length(length, unit as UnitArg));
     }
+
+    divByNumber(value: number): Length {
+        this.value /= value;
+        return this;
+    }
+
+    divByLength(length: AbstractLength): number;
+    divByLength(length: number, unit: UnitArg): number;
+    divByLength(length: LengthArg, unit?: UnitArg): number {
+        return length instanceof AbstractLength
+            ? this.metres / length.metres
+            : this.divByLength(new Length(length, unit as UnitArg));
+    }
+
+
 }
