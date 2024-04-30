@@ -1,5 +1,5 @@
-import Length from "../src/Length";
 import LengthUnit from "../src/LengthUnit";
+import {Length} from "../src/Mutables";
 
 test('Addition', () => {
     const length1 = new Length(1, LengthUnit.METRE);

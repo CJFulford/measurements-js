@@ -1,7 +1,6 @@
 import LengthUnit from "../src/LengthUnit";
-import Length from "../src/Length";
 import AreaUnit from "../src/AreaUnit";
-import Area from "../src/Area";
+import {Area, Length} from "../src/Mutables";
 
 test("Formatting", () => {
     const length1 = new Length(1, LengthUnit.METRE);

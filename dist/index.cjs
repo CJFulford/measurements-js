@@ -3,6 +3,10 @@ var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -15,6 +19,12 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 
 // index.ts
 var measurements_js_exports = {};
+__export(measurements_js_exports, {
+  Area: () => Area,
+  AreaImmutable: () => AreaImmutable,
+  Length: () => Length,
+  LengthImmutable: () => LengthImmutable
+});
 module.exports = __toCommonJS(measurements_js_exports);
 
 // src/LengthUnit.ts
@@ -144,3 +154,297 @@ _AreaUnit.SQUARE_FOOT = 6;
 _AreaUnit.SQUARE_YARD = 7;
 _AreaUnit.SQUARE_MILE = 8;
 var AreaUnit = _AreaUnit;
+
+// src/Abstracts.ts
+var AbstractLength = class {
+  constructor(value, unit) {
+    this.value = value;
+    this.unit = unit instanceof LengthUnit ? unit : LengthUnit.getById(unit);
+  }
+  getValue(unit) {
+    unit = unit instanceof LengthUnit ? unit : LengthUnit.getById(unit);
+    return this.value * this.unit.baseUnitsPer / unit.baseUnitsPer;
+  }
+  get kilometres() {
+    return this.getValue(LengthUnit.KILOMETRE);
+  }
+  get metres() {
+    return this.getValue(LengthUnit.METRE);
+  }
+  get centimetres() {
+    return this.getValue(LengthUnit.CENTIMETRE);
+  }
+  get millimetres() {
+    return this.getValue(LengthUnit.MILLIMETRE);
+  }
+  get inches() {
+    return this.getValue(LengthUnit.INCH);
+  }
+  get feet() {
+    return this.getValue(LengthUnit.FOOT);
+  }
+  get yards() {
+    return this.getValue(LengthUnit.YARD);
+  }
+  get miles() {
+    return this.getValue(LengthUnit.MILE);
+  }
+  format(decimals, unit, type = "acronym") {
+    const numeral = require("numeral");
+    const number = numeral(this.getValue(unit)).format();
+    unit = unit instanceof LengthUnit ? unit : LengthUnit.getById(unit);
+    let suffix;
+    switch (type) {
+      case "name":
+        suffix = " " + (this.isEqualTo(1, unit) ? unit.name : unit.pluralName);
+        break;
+      case "acronym":
+        suffix = unit.acronym;
+        break;
+      case "symbol":
+        suffix = unit.symbol;
+        break;
+      default:
+        throw new Error("Invalid format type");
+    }
+    return `${number}${suffix}`;
+  }
+};
+var AbstractArea = class {
+  constructor(value, unit) {
+    this.value = value;
+    this.unit = unit instanceof AreaUnit ? unit : AreaUnit.getById(unit);
+  }
+  getValue(unit) {
+    unit = unit instanceof AreaUnit ? unit : AreaUnit.getById(unit);
+    return this.value * this.unit.baseUnitsPer / unit.baseUnitsPer;
+  }
+  get squareKilometres() {
+    return this.getValue(AreaUnit.SQUARE_KILOMETRE);
+  }
+  get squareMetres() {
+    return this.getValue(AreaUnit.SQUARE_METRE);
+  }
+  get squareCentimetres() {
+    return this.getValue(AreaUnit.SQUARE_CENTIMETRE);
+  }
+  get squareMillimetres() {
+    return this.getValue(AreaUnit.SQUARE_MILLIMETRE);
+  }
+  get squareInches() {
+    return this.getValue(AreaUnit.SQUARE_INCH);
+  }
+  get squareFeet() {
+    return this.getValue(AreaUnit.SQUARE_FOOT);
+  }
+  get squareYards() {
+    return this.getValue(AreaUnit.SQUARE_YARD);
+  }
+  get squareMiles() {
+    return this.getValue(AreaUnit.SQUARE_MILE);
+  }
+  format(decimals, unit, type = "acronym") {
+    const numeral = require("numeral");
+    const number = numeral(this.getValue(unit)).format();
+    unit = unit instanceof AreaUnit ? unit : AreaUnit.getById(unit);
+    let suffix;
+    switch (type) {
+      case "name":
+        suffix = " " + (this.isEqualTo(1, unit) ? unit.name : unit.pluralName);
+        break;
+      case "acronym":
+        suffix = unit.acronym;
+        break;
+      default:
+        throw new Error("Invalid format type");
+    }
+    return `${number}${suffix}`;
+  }
+};
+
+// src/Helpers.ts
+function floatsEqual(a, b, precision = 5) {
+  const epsilon = 0.1 / Math.pow(10, precision);
+  return Math.abs(a - b) < epsilon;
+}
+
+// src/Mutables.ts
+var Length = class _Length extends AbstractLength {
+  constructor(value, unit) {
+    super(value, unit);
+  }
+  add(length, unit) {
+    length = length instanceof AbstractLength ? length : new _Length(length, unit);
+    this.value += length.getValue(this.unit);
+    return this;
+  }
+  sub(length, unit) {
+    length = length instanceof AbstractLength ? length : new _Length(length, unit);
+    this.value -= length.getValue(this.unit);
+    return this;
+  }
+  mulByNumber(value) {
+    this.value *= value;
+    return this;
+  }
+  mulByLength(length, unit) {
+    return length instanceof AbstractLength ? new Area(this.metres * length.metres, AreaUnit.SQUARE_METRE) : this.mulByLength(new _Length(length, unit));
+  }
+  divByNumber(value) {
+    this.value /= value;
+    return this;
+  }
+  divByLength(length, unit) {
+    return length instanceof AbstractLength ? this.metres / length.metres : this.divByLength(new _Length(length, unit));
+  }
+  isEqualTo(length, unit) {
+    return length instanceof AbstractLength ? floatsEqual(this.metres, length.metres) : this.isEqualTo(new _Length(length, unit));
+  }
+  isLessThan(length, unit) {
+    return length instanceof AbstractLength ? this.metres < length.metres : this.isLessThan(new _Length(length, unit));
+  }
+  isLessThanOrEqualTo(length, unit) {
+    return length instanceof AbstractLength ? this.isLessThan(length) || this.isEqualTo(length) : this.isLessThanOrEqualTo(new _Length(length, unit));
+  }
+  isGreaterThan(length, unit) {
+    return length instanceof AbstractLength ? this.metres > length.metres : this.isGreaterThan(new _Length(length, unit));
+  }
+  isGreaterThanOrEqualTo(length, unit) {
+    return length instanceof AbstractLength ? this.isGreaterThan(length) || this.isEqualTo(length) : this.isGreaterThanOrEqualTo(new _Length(length, unit));
+  }
+};
+var Area = class _Area extends AbstractArea {
+  constructor(value, unit) {
+    super(value, unit);
+  }
+  add(area, unit) {
+    area = area instanceof AbstractArea ? area : new _Area(area, unit);
+    this.value += area.getValue(this.unit);
+    return this;
+  }
+  sub(area, unit) {
+    area = area instanceof AbstractArea ? area : new _Area(area, unit);
+    this.value -= area.getValue(this.unit);
+    return this;
+  }
+  mulByNumber(value) {
+    this.value *= value;
+    return this;
+  }
+  divByNumber(value) {
+    this.value /= value;
+    return this;
+  }
+  divByLength(length, unit) {
+    return length instanceof AbstractLength ? new Length(this.squareMetres / length.metres, LengthUnit.METRE) : this.divByLength(new Length(length, unit));
+  }
+  divByArea(area, unit) {
+    return area instanceof AbstractArea ? this.squareMetres / area.squareMetres : this.divByArea(new _Area(area, unit));
+  }
+  isEqualTo(area, unit) {
+    return area instanceof AbstractArea ? floatsEqual(this.squareMetres, area.squareMetres) : this.isEqualTo(new _Area(area, unit));
+  }
+  isLessThan(area, unit) {
+    return area instanceof AbstractArea ? this.squareMetres < area.squareMetres : this.isLessThan(new _Area(area, unit));
+  }
+  isLessThanOrEqualTo(area, unit) {
+    return area instanceof AbstractArea ? this.isLessThan(area) || this.isEqualTo(area) : this.isLessThanOrEqualTo(new _Area(area, unit));
+  }
+  isGreaterThan(area, unit) {
+    return area instanceof AbstractArea ? this.squareMetres > area.squareMetres : this.isGreaterThan(new _Area(area, unit));
+  }
+  isGreaterThanOrEqualTo(area, unit) {
+    return area instanceof AbstractArea ? this.isGreaterThan(area) || this.isEqualTo(area) : this.isGreaterThanOrEqualTo(new _Area(area, unit));
+  }
+};
+
+// src/Immutables.ts
+var LengthImmutable = class _LengthImmutable extends AbstractLength {
+  constructor(value, unit) {
+    super(value, unit);
+  }
+  add(length, unit) {
+    length = length instanceof AbstractLength ? length : new _LengthImmutable(length, unit);
+    const value = this.value + length.getValue(this.unit);
+    return new _LengthImmutable(value, this.unit);
+  }
+  sub(length, unit) {
+    length = length instanceof AbstractLength ? length : new _LengthImmutable(length, unit);
+    const value = this.value - length.getValue(this.unit);
+    return new _LengthImmutable(value, this.unit);
+  }
+  mulByNumber(value) {
+    return new _LengthImmutable(this.value * value, this.unit);
+  }
+  mulByLength(length, unit) {
+    return length instanceof AbstractLength ? new AreaImmutable(this.metres * length.metres, AreaUnit.SQUARE_METRE) : this.mulByLength(new _LengthImmutable(length, unit));
+  }
+  divByNumber(value) {
+    return new _LengthImmutable(this.value / value, this.unit);
+  }
+  divByLength(length, unit) {
+    return length instanceof AbstractLength ? this.metres / length.metres : this.divByLength(new _LengthImmutable(length, unit));
+  }
+  isEqualTo(length, unit) {
+    return length instanceof AbstractLength ? floatsEqual(this.metres, length.metres) : this.isEqualTo(new _LengthImmutable(length, unit));
+  }
+  isLessThan(length, unit) {
+    return length instanceof AbstractLength ? this.metres < length.metres : this.isLessThan(new _LengthImmutable(length, unit));
+  }
+  isLessThanOrEqualTo(length, unit) {
+    return length instanceof AbstractLength ? this.isLessThan(length) || this.isEqualTo(length) : this.isLessThanOrEqualTo(new _LengthImmutable(length, unit));
+  }
+  isGreaterThan(length, unit) {
+    return length instanceof AbstractLength ? this.metres > length.metres : this.isGreaterThan(new _LengthImmutable(length, unit));
+  }
+  isGreaterThanOrEqualTo(length, unit) {
+    return length instanceof AbstractLength ? this.isGreaterThan(length) || this.isEqualTo(length) : this.isGreaterThanOrEqualTo(new _LengthImmutable(length, unit));
+  }
+};
+var AreaImmutable = class _AreaImmutable extends AbstractArea {
+  constructor(value, unit) {
+    super(value, unit);
+  }
+  add(area, unit) {
+    area = area instanceof AbstractArea ? area : new _AreaImmutable(area, unit);
+    return new _AreaImmutable(this.value + area.getValue(this.unit), this.unit);
+  }
+  sub(area, unit) {
+    area = area instanceof AbstractArea ? area : new _AreaImmutable(area, unit);
+    return new _AreaImmutable(this.value - area.getValue(this.unit), this.unit);
+  }
+  mulByNumber(value) {
+    return new _AreaImmutable(this.value * value, this.unit);
+  }
+  divByNumber(value) {
+    return new _AreaImmutable(this.value / value, this.unit);
+  }
+  divByLength(length, unit) {
+    return length instanceof AbstractLength ? new LengthImmutable(this.squareMetres / length.metres, LengthUnit.METRE) : this.divByLength(new LengthImmutable(length, unit));
+  }
+  divByArea(area, unit) {
+    return area instanceof AbstractArea ? this.squareMetres / area.squareMetres : this.divByArea(new _AreaImmutable(area, unit));
+  }
+  isEqualTo(area, unit) {
+    return area instanceof AbstractArea ? floatsEqual(this.squareMetres, area.squareMetres) : this.isEqualTo(new _AreaImmutable(area, unit));
+  }
+  isLessThan(area, unit) {
+    return area instanceof AbstractArea ? this.squareMetres < area.squareMetres : this.isLessThan(new _AreaImmutable(area, unit));
+  }
+  isLessThanOrEqualTo(area, unit) {
+    return area instanceof AbstractArea ? this.isLessThan(area) || this.isEqualTo(area) : this.isLessThanOrEqualTo(new _AreaImmutable(area, unit));
+  }
+  isGreaterThan(area, unit) {
+    return area instanceof AbstractArea ? this.squareMetres > area.squareMetres : this.isGreaterThan(new _AreaImmutable(area, unit));
+  }
+  isGreaterThanOrEqualTo(area, unit) {
+    return area instanceof AbstractArea ? this.isGreaterThan(area) || this.isEqualTo(area) : this.isGreaterThanOrEqualTo(new _AreaImmutable(area, unit));
+  }
+};
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  Area,
+  AreaImmutable,
+  Length,
+  LengthImmutable
+});

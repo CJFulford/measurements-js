@@ -1,7 +1,6 @@
 import AreaUnit from "../src/AreaUnit";
 import LengthUnit from "../src/LengthUnit";
-import AreaImmutable from "../src/AreaImmutable";
-import LengthImmutable from "../src/LengthImmutable";
+import {AreaImmutable, LengthImmutable} from "../src/Immutables";
 
 test('Addition', () => {
     const area1 = new AreaImmutable(1, AreaUnit.SQUARE_METRE);
