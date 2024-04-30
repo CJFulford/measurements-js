@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "build": "tsup index.ts --format cjs,esm --dts --clean",
+    "build": "tsup",
     "lint": "tsc",
     "test": "jest"
   },
