@@ -65,9 +65,9 @@ test('Division By Length', () => {
 });
 
 test('Is Equal To', () => {
-    const length1 = new Length(15, LengthUnit.METRE);
-    const length2 = new Length(15, LengthUnit.METRE);
-    const length3 = new Length(20, LengthUnit.METRE);
+    const length1 = new LengthImmutable(15, LengthUnit.METRE);
+    const length2 = new LengthImmutable(15, LengthUnit.METRE);
+    const length3 = new LengthImmutable(20, LengthUnit.METRE);
     expect(length1.isEqualTo(length2)).toBe(true);
     expect(length1.isEqualTo(length3)).toBe(false);
 });
