@@ -1,5 +1,5 @@
-import AreaUnit from "../src/AreaUnit";
-import LengthUnit from "../src/LengthUnit";
+import {AreaUnit} from "../src/AreaUnit";
+import {LengthUnit} from "../src/LengthUnit";
 import {AreaImmutable, LengthImmutable} from "../src/Immutables";
 
 test('Addition', () => {

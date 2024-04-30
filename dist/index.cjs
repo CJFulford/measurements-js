@@ -22,8 +22,10 @@ var measurements_js_exports = {};
 __export(measurements_js_exports, {
   Area: () => Area,
   AreaImmutable: () => AreaImmutable,
+  AreaUnit: () => AreaUnit,
   Length: () => Length,
-  LengthImmutable: () => LengthImmutable
+  LengthImmutable: () => LengthImmutable,
+  LengthUnit: () => LengthUnit
 });
 module.exports = __toCommonJS(measurements_js_exports);
 
@@ -445,6 +447,8 @@ var AreaImmutable = class _AreaImmutable extends AbstractArea {
 0 && (module.exports = {
   Area,
   AreaImmutable,
+  AreaUnit,
   Length,
-  LengthImmutable
+  LengthImmutable,
+  LengthUnit
 });

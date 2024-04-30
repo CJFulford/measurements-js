@@ -1,5 +1,5 @@
-import LengthUnit from "../src/LengthUnit";
-import AreaUnit from "../src/AreaUnit";
+import {LengthUnit} from "../src/LengthUnit";
+import {AreaUnit} from "../src/AreaUnit";
 import {Area, Length} from "../src/Mutables";
 
 test("Formatting", () => {

@@ -1,4 +1,4 @@
-import LengthUnit from "../src/LengthUnit";
+import {LengthUnit} from "../src/LengthUnit";
 import {LengthImmutable} from "../src/Immutables";
 import {Length} from "../src/Mutables";
 

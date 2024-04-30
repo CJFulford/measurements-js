@@ -1,6 +1,6 @@
 import {AbstractArea, AbstractLength, AreaArg, AreaUnitArg, LengthArg, LengthUnitArg} from "./Abstracts";
-import LengthUnit from "./LengthUnit";
-import AreaUnit from "./AreaUnit";
+import {LengthUnit} from "./LengthUnit";
+import {AreaUnit} from "./AreaUnit";
 import {floatsEqual} from "./Helpers";
 
 export class Length extends AbstractLength {

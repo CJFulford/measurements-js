@@ -423,6 +423,8 @@ var AreaImmutable = class _AreaImmutable extends AbstractArea {
 export {
   Area,
   AreaImmutable,
+  AreaUnit,
   Length,
-  LengthImmutable
+  LengthImmutable,
+  LengthUnit
 };

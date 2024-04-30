@@ -1,4 +1,4 @@
-export default class LengthUnit {
+export class LengthUnit {
     public static readonly KILOMETRE = 1;
     public static readonly METRE = 2;
     public static readonly CENTIMETRE = 3;

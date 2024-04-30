@@ -229,4 +229,4 @@ declare class AreaImmutable extends AbstractArea {
     isGreaterThanOrEqualTo(area: number, unit: number): boolean;
 }
 
-export { Area, AreaImmutable, Length, LengthImmutable };
+export { Area, AreaImmutable, AreaUnit, Length, LengthImmutable, LengthUnit };

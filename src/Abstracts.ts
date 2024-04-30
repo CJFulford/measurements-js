@@ -1,5 +1,5 @@
-import AreaUnit from "./AreaUnit";
-import LengthUnit from "./LengthUnit";
+import {AreaUnit} from "./AreaUnit";
+import {LengthUnit} from "./LengthUnit";
 
 export type LengthArg = AbstractLength | number;
 export type LengthUnitArg = LengthUnit | number;

@@ -1,6 +1,6 @@
-import LengthUnit from "./LengthUnit";
+import {LengthUnit} from "./LengthUnit";
 
-export default class AreaUnit {
+export class AreaUnit {
     public static readonly SQUARE_METRE = 1;
     public static readonly SQUARE_KILOMETRE = 2;
     public static readonly SQUARE_CENTIMETRE = 3;
