@@ -22,6 +22,22 @@ abstract class AbstractMeasurement{
     public isNotZero(): boolean {
         return !this.isZero();
     }
+
+    public isGreaterThanZero(): boolean {
+        return this.value > 0;
+    }
+
+    public isGreaterThanOrEqualToZero(): boolean {
+        return this.value >= 0;
+    }
+
+    public isLessThanZero(): boolean {
+        return this.value < 0;
+    }
+
+    public isLessThanOrEqualToZero(): boolean {
+        return this.value <= 0;
+    }
 }
 
 export abstract class AbstractLength extends AbstractMeasurement{
