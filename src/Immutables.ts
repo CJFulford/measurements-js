@@ -2,8 +2,10 @@ import {AbstractArea, AbstractLength, AreaArg, AreaUnitArg, LengthArg, LengthUni
 import {LengthUnit} from "./LengthUnit";
 import {AreaUnit} from "./AreaUnit";
 import {floatsEqual} from "./Helpers";
+import {Immutable} from "./Interfaces";
+import {Area, Length} from "./Mutables";
 
-export class LengthImmutable extends AbstractLength {
+export class LengthImmutable extends AbstractLength implements Immutable {
 
     constructor(value: number, unit: LengthUnitArg) {
         super(value, unit);
@@ -90,10 +92,14 @@ export class LengthImmutable extends AbstractLength {
             ? this.isGreaterThan(length) || this.isEqualTo(length)
             : this.isGreaterThanOrEqualTo(new LengthImmutable(length, unit as LengthUnitArg));
     }
+
+    toMutable(): Length {
+        return new Length(this.value, this.unit);
+    }
 }
 
 
-export class AreaImmutable extends AbstractArea {
+export class AreaImmutable extends AbstractArea implements Immutable{
 
     constructor(value: number, unit: AreaUnitArg) {
         super(value, unit);
@@ -177,5 +183,9 @@ export class AreaImmutable extends AbstractArea {
         return area instanceof AbstractArea
             ? this.isGreaterThan(area) || this.isEqualTo(area)
             : this.isGreaterThanOrEqualTo(new AreaImmutable(area, unit as AreaUnitArg));
+    }
+
+    toMutable(): Area {
+        return new Area(this.value, this.unit);
     }
 }
