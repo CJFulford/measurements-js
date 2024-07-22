@@ -1,6 +1,7 @@
 import {AreaUnit} from "./AreaUnit";
 import {LengthUnit} from "./LengthUnit";
 import {floatsEqual} from "./Helpers";
+import numeral from "numeral";
 
 export type LengthArg = AbstractLength | number;
 export type LengthUnitArg = LengthUnit | number;
@@ -126,7 +127,6 @@ export abstract class AbstractLength extends AbstractMeasurement{
     abstract isGreaterThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean;
 
     format(decimals: number, unit: LengthUnitArg, type: "name" | "acronym" | "symbol" = "acronym"): string {
-        const numeral = require('numeral');
         const number = numeral(this.getValue(unit)).format();
 
         unit = unit instanceof LengthUnit ? unit : LengthUnit.getById(unit as number);
@@ -237,7 +237,6 @@ export abstract class AbstractArea extends AbstractMeasurement{
     abstract isGreaterThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean;
 
     format(decimals: number, unit: AreaUnitArg, type: "name" | "acronym" = "acronym"): string {
-        const numeral = require('numeral');
         const number = numeral(this.getValue(unit)).format();
 
         unit = unit instanceof AreaUnit ? unit : AreaUnit.getById(unit as number);
