@@ -1,5 +1,6 @@
 import {AreaUnit} from "./AreaUnit";
 import {LengthUnit} from "./LengthUnit";
+import {floatsEqual} from "./Helpers";
 
 export type LengthArg = AbstractLength | number;
 export type LengthUnitArg = LengthUnit | number;
@@ -12,6 +13,14 @@ abstract class AbstractMeasurement{
 
     protected constructor(value: number) {
         this.value = value;
+    }
+
+    public isZero(): boolean {
+        return floatsEqual(this.value, 0);
+    }
+
+    public isNotZero(): boolean {
+        return !this.isZero();
     }
 }
 
