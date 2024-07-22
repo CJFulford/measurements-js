@@ -3,11 +3,11 @@ import {LengthUnit} from "./LengthUnit";
 import {AreaUnit} from "./AreaUnit";
 import {floatsEqual} from "./Helpers";
 
-export interface Mutable{
+interface Mutable{
     toImmutable(): Immutable;
 }
 
-export interface Immutable{
+interface Immutable{
     toMutable(): Mutable;
 }
 
