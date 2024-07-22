@@ -1,11 +1,3 @@
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined")
-    return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
-
 // src/LengthUnit.ts
 var _LengthUnit = class _LengthUnit {
   constructor(id, baseUnitsPer, name, pluralName, acronym, symbol) {
@@ -141,6 +133,7 @@ function floatsEqual(a, b, precision = 5) {
 }
 
 // src/Abstracts.ts
+import numeral from "numeral";
 var AbstractMeasurement = class {
   constructor(value) {
     this.value = value;
@@ -198,7 +191,6 @@ var AbstractLength = class extends AbstractMeasurement {
     return this.getValue(LengthUnit.MILE);
   }
   format(decimals, unit, type = "acronym") {
-    const numeral = __require("numeral");
     const number = numeral(this.getValue(unit)).format();
     unit = unit instanceof LengthUnit ? unit : LengthUnit.getById(unit);
     let suffix;
@@ -252,7 +244,6 @@ var AbstractArea = class extends AbstractMeasurement {
     return this.getValue(AreaUnit.SQUARE_MILE);
   }
   format(decimals, unit, type = "acronym") {
-    const numeral = __require("numeral");
     const number = numeral(this.getValue(unit)).format();
     unit = unit instanceof AreaUnit ? unit : AreaUnit.getById(unit);
     let suffix;
