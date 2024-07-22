@@ -1,5 +1,6 @@
 import {AreaUnit} from "./AreaUnit";
 import {LengthUnit} from "./LengthUnit";
+import {floatsEqual} from "./Helpers";
 
 export type LengthArg = AbstractLength | number;
 export type LengthUnitArg = LengthUnit | number;
@@ -7,12 +8,43 @@ export type LengthUnitArg = LengthUnit | number;
 export type AreaArg = AbstractArea | number;
 export type AreaUnitArg = AreaUnit | number;
 
-export abstract class AbstractLength {
+abstract class AbstractMeasurement{
     protected value: number;
+
+    protected constructor(value: number) {
+        this.value = value;
+    }
+
+    public isZero(): boolean {
+        return floatsEqual(this.value, 0);
+    }
+
+    public isNotZero(): boolean {
+        return !this.isZero();
+    }
+
+    public isGreaterThanZero(): boolean {
+        return this.value > 0;
+    }
+
+    public isGreaterThanOrEqualToZero(): boolean {
+        return this.value >= 0;
+    }
+
+    public isLessThanZero(): boolean {
+        return this.value < 0;
+    }
+
+    public isLessThanOrEqualToZero(): boolean {
+        return this.value <= 0;
+    }
+}
+
+export abstract class AbstractLength extends AbstractMeasurement{
     protected unit: LengthUnit;
 
     protected constructor(value: number, unit: LengthUnitArg) {
-        this.value = value;
+        super(value);
         this.unit = unit instanceof LengthUnit ? unit : LengthUnit.getById(unit as number);
     }
 
@@ -118,13 +150,12 @@ export abstract class AbstractLength {
     }
 }
 
-export abstract class AbstractArea {
+export abstract class AbstractArea extends AbstractMeasurement{
 
-    protected value: number;
     protected unit: AreaUnit;
 
     protected constructor(value: number, unit: AreaUnitArg) {
-        this.value = value;
+        super(value);
         this.unit = unit instanceof AreaUnit ? unit : AreaUnit.getById(unit as number);
     }
 
