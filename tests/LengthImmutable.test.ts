@@ -1,6 +1,5 @@
 import {LengthUnit} from "../src/LengthUnit";
-import {LengthImmutable} from "../src/Immutables";
-import {Length} from "../src/Mutables";
+import {LengthImmutable} from "../src/Concretes";
 
 test('Addition', () => {
     const length1 = new LengthImmutable(1, LengthUnit.METRE);

@@ -46,8 +46,17 @@ type LengthArg = AbstractLength | number;
 type LengthUnitArg = LengthUnit | number;
 type AreaArg = AbstractArea | number;
 type AreaUnitArg = AreaUnit | number;
-declare abstract class AbstractLength {
+declare abstract class AbstractMeasurement {
     protected value: number;
+    protected constructor(value: number);
+    isZero(): boolean;
+    isNotZero(): boolean;
+    isGreaterThanZero(): boolean;
+    isGreaterThanOrEqualToZero(): boolean;
+    isLessThanZero(): boolean;
+    isLessThanOrEqualToZero(): boolean;
+}
+declare abstract class AbstractLength extends AbstractMeasurement {
     protected unit: LengthUnit;
     protected constructor(value: number, unit: LengthUnitArg);
     getValue(unit: LengthUnitArg): number;
@@ -90,8 +99,7 @@ declare abstract class AbstractLength {
     abstract isGreaterThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean;
     format(decimals: number, unit: LengthUnitArg, type?: "name" | "acronym" | "symbol"): string;
 }
-declare abstract class AbstractArea {
-    protected value: number;
+declare abstract class AbstractArea extends AbstractMeasurement {
     protected unit: AreaUnit;
     protected constructor(value: number, unit: AreaUnitArg);
     getValue(unit: AreaUnit | number): number;
@@ -135,7 +143,13 @@ declare abstract class AbstractArea {
     format(decimals: number, unit: AreaUnitArg, type?: "name" | "acronym"): string;
 }
 
-declare class Length extends AbstractLength {
+interface Mutable {
+    toImmutable(): Immutable;
+}
+interface Immutable {
+    toMutable(): Mutable;
+}
+declare class Length extends AbstractLength implements Mutable {
     constructor(value: number, unit: LengthUnitArg);
     add(length: AbstractLength): Length;
     add(length: number, unit: LengthUnitArg): Length;
@@ -157,32 +171,9 @@ declare class Length extends AbstractLength {
     isGreaterThan(length: number, unit: number): boolean;
     isGreaterThanOrEqualTo(length: AbstractLength): boolean;
     isGreaterThanOrEqualTo(length: number, unit: number): boolean;
+    toImmutable(): LengthImmutable;
 }
-declare class Area extends AbstractArea {
-    constructor(value: number, unit: AreaUnitArg);
-    add(area: AbstractArea): Area;
-    add(area: number, unit: AreaUnitArg): Area;
-    sub(area: AbstractArea): Area;
-    sub(area: number, unit: AreaUnitArg): Area;
-    mulByNumber(value: number): Area;
-    divByNumber(value: number): Area;
-    divByLength(length: AbstractLength): Length;
-    divByLength(length: number, unit: LengthUnitArg): Length;
-    divByArea(area: AbstractArea): number;
-    divByArea(area: number, unit: AreaUnitArg): number;
-    isEqualTo(area: AbstractArea): boolean;
-    isEqualTo(area: number, unit: number): boolean;
-    isLessThan(area: AbstractArea): boolean;
-    isLessThan(area: number, unit: number): boolean;
-    isLessThanOrEqualTo(area: AbstractArea): boolean;
-    isLessThanOrEqualTo(area: number, unit: number): boolean;
-    isGreaterThan(area: AbstractArea): boolean;
-    isGreaterThan(area: number, unit: number): boolean;
-    isGreaterThanOrEqualTo(area: AbstractArea): boolean;
-    isGreaterThanOrEqualTo(area: number, unit: number): boolean;
-}
-
-declare class LengthImmutable extends AbstractLength {
+declare class LengthImmutable extends AbstractLength implements Immutable {
     constructor(value: number, unit: LengthUnitArg);
     add(length: AbstractLength): LengthImmutable;
     add(length: number, unit: LengthUnitArg): LengthImmutable;
@@ -204,8 +195,33 @@ declare class LengthImmutable extends AbstractLength {
     isGreaterThan(length: number, unit: number): boolean;
     isGreaterThanOrEqualTo(length: AbstractLength): boolean;
     isGreaterThanOrEqualTo(length: number, unit: number): boolean;
+    toMutable(): Length;
 }
-declare class AreaImmutable extends AbstractArea {
+declare class Area extends AbstractArea implements Mutable {
+    constructor(value: number, unit: AreaUnitArg);
+    add(area: AbstractArea): Area;
+    add(area: number, unit: AreaUnitArg): Area;
+    sub(area: AbstractArea): Area;
+    sub(area: number, unit: AreaUnitArg): Area;
+    mulByNumber(value: number): Area;
+    divByNumber(value: number): Area;
+    divByLength(length: AbstractLength): Length;
+    divByLength(length: number, unit: LengthUnitArg): Length;
+    divByArea(area: AbstractArea): number;
+    divByArea(area: number, unit: AreaUnitArg): number;
+    isEqualTo(area: AbstractArea): boolean;
+    isEqualTo(area: number, unit: number): boolean;
+    isLessThan(area: AbstractArea): boolean;
+    isLessThan(area: number, unit: number): boolean;
+    isLessThanOrEqualTo(area: AbstractArea): boolean;
+    isLessThanOrEqualTo(area: number, unit: number): boolean;
+    isGreaterThan(area: AbstractArea): boolean;
+    isGreaterThan(area: number, unit: number): boolean;
+    isGreaterThanOrEqualTo(area: AbstractArea): boolean;
+    isGreaterThanOrEqualTo(area: number, unit: number): boolean;
+    toImmutable(): AreaImmutable;
+}
+declare class AreaImmutable extends AbstractArea implements Immutable {
     constructor(value: number, unit: AreaUnitArg);
     add(area: AbstractArea): AreaImmutable;
     add(area: number, unit: AreaUnitArg): AreaImmutable;
@@ -227,6 +243,7 @@ declare class AreaImmutable extends AbstractArea {
     isGreaterThan(area: number, unit: number): boolean;
     isGreaterThanOrEqualTo(area: AbstractArea): boolean;
     isGreaterThanOrEqualTo(area: number, unit: number): boolean;
+    toMutable(): Area;
 }
 
 export { Area, AreaImmutable, AreaUnit, Length, LengthImmutable, LengthUnit };
