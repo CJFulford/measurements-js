@@ -171,3 +171,48 @@ test('Is Greater Than Or Equal To', () => {
     expect(area4.isGreaterThanOrEqualTo(area2)).toBe(true);
     expect(area4.isGreaterThanOrEqualTo(area3)).toBe(true);
 });
+
+test('Handling of non number types', () => {
+
+    expect(new Area(1, AreaUnit.SQUARE_METRE).squareMetres).toBe(1);
+
+    // @ts-ignore, for testing purposes
+    expect(new Area("1", AreaUnit.SQUARE_METRE).squareMetres).toBe(1);
+
+    expect(new Area(1.5, AreaUnit.SQUARE_METRE).squareMetres).toBe(1.5);
+
+    // @ts-ignore, for testing purposes
+    expect(new Area("1.5", AreaUnit.SQUARE_METRE).squareMetres).toBe(1.5);
+
+    expect(new Area(1, AreaUnit.SQUARE_METRE).add(new Area(1, AreaUnit.SQUARE_METRE)).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Area(1, AreaUnit.SQUARE_METRE).add(new Area('1', AreaUnit.SQUARE_METRE)).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Area('1', AreaUnit.SQUARE_METRE).add(new Area(1, AreaUnit.SQUARE_METRE)).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Area('1', AreaUnit.SQUARE_METRE).add(new Area('1', AreaUnit.SQUARE_METRE)).squareMetres).toBe(2);
+
+    expect(new Area(1.5, AreaUnit.SQUARE_METRE).add(new Area(1.5, AreaUnit.SQUARE_METRE)).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Area(1.5, AreaUnit.SQUARE_METRE).add(new Area('1.5', AreaUnit.SQUARE_METRE)).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Area('1.5', AreaUnit.SQUARE_METRE).add(new Area(1.5, AreaUnit.SQUARE_METRE)).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Area('1.5', AreaUnit.SQUARE_METRE).add(new Area('1.5', AreaUnit.SQUARE_METRE)).squareMetres).toBe(3);
+
+    expect(new Area(1, AreaUnit.SQUARE_METRE).add(1, AreaUnit.SQUARE_METRE).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Area(1, AreaUnit.SQUARE_METRE).add('1', AreaUnit.SQUARE_METRE).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Area('1', AreaUnit.SQUARE_METRE).add(1, AreaUnit.SQUARE_METRE).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Area('1', AreaUnit.SQUARE_METRE).add('1', AreaUnit.SQUARE_METRE).squareMetres).toBe(2);
+
+    expect(new Area(1.5, AreaUnit.SQUARE_METRE).add(1.5, AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Area(1.5, AreaUnit.SQUARE_METRE).add('1.5', AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Area('1.5', AreaUnit.SQUARE_METRE).add(1.5, AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Area('1.5', AreaUnit.SQUARE_METRE).add('1.5', AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
+});
