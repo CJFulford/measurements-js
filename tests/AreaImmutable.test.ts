@@ -1,6 +1,6 @@
 import {AreaUnit} from "../src/AreaUnit";
 import {LengthUnit} from "../src/LengthUnit";
-import {AreaImmutable, LengthImmutable} from "../src/Concretes";
+import {Area, AreaImmutable, LengthImmutable} from "../src/Concretes";
 
 test('Addition', () => {
     const area1 = new AreaImmutable(1, AreaUnit.SQUARE_METRE);
@@ -170,4 +170,49 @@ test('Is Greater Than Or Equal To', () => {
     expect(area4.isGreaterThanOrEqualTo(area1)).toBe(true);
     expect(area4.isGreaterThanOrEqualTo(area2)).toBe(true);
     expect(area4.isGreaterThanOrEqualTo(area3)).toBe(true);
+});
+
+test('Handling of non number types', () => {
+
+    expect(new AreaImmutable(1, AreaUnit.SQUARE_METRE).squareMetres).toBe(1);
+
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable("1", AreaUnit.SQUARE_METRE).squareMetres).toBe(1);
+
+    expect(new AreaImmutable(1.5, AreaUnit.SQUARE_METRE).squareMetres).toBe(1.5);
+
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable("1.5", AreaUnit.SQUARE_METRE).squareMetres).toBe(1.5);
+
+    expect(new AreaImmutable(1, AreaUnit.SQUARE_METRE).add(new AreaImmutable(1, AreaUnit.SQUARE_METRE)).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable(1, AreaUnit.SQUARE_METRE).add(new AreaImmutable('1', AreaUnit.SQUARE_METRE)).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable('1', AreaUnit.SQUARE_METRE).add(new AreaImmutable(1, AreaUnit.SQUARE_METRE)).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable('1', AreaUnit.SQUARE_METRE).add(new AreaImmutable('1', AreaUnit.SQUARE_METRE)).squareMetres).toBe(2);
+
+    expect(new AreaImmutable(1.5, AreaUnit.SQUARE_METRE).add(new AreaImmutable(1.5, AreaUnit.SQUARE_METRE)).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable(1.5, AreaUnit.SQUARE_METRE).add(new AreaImmutable('1.5', AreaUnit.SQUARE_METRE)).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable('1.5', AreaUnit.SQUARE_METRE).add(new AreaImmutable(1.5, AreaUnit.SQUARE_METRE)).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable('1.5', AreaUnit.SQUARE_METRE).add(new AreaImmutable('1.5', AreaUnit.SQUARE_METRE)).squareMetres).toBe(3);
+
+    expect(new AreaImmutable(1, AreaUnit.SQUARE_METRE).add(1, AreaUnit.SQUARE_METRE).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable(1, AreaUnit.SQUARE_METRE).add('1', AreaUnit.SQUARE_METRE).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable('1', AreaUnit.SQUARE_METRE).add(1, AreaUnit.SQUARE_METRE).squareMetres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable('1', AreaUnit.SQUARE_METRE).add('1', AreaUnit.SQUARE_METRE).squareMetres).toBe(2);
+
+    expect(new AreaImmutable(1.5, AreaUnit.SQUARE_METRE).add(1.5, AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable(1.5, AreaUnit.SQUARE_METRE).add('1.5', AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable('1.5', AreaUnit.SQUARE_METRE).add(1.5, AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new AreaImmutable('1.5', AreaUnit.SQUARE_METRE).add('1.5', AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
 });

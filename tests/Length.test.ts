@@ -158,3 +158,48 @@ test('Is Greater Than Or Equal To', () => {
     expect(length4.isGreaterThanOrEqualTo(length2)).toBe(true);
     expect(length4.isGreaterThanOrEqualTo(length3)).toBe(true);
 });
+
+test('Handling of non number types', () => {
+
+    expect(new Length(1, LengthUnit.METRE).metres).toBe(1);
+
+    // @ts-ignore, for testing purposes
+    expect(new Length("1", LengthUnit.METRE).metres).toBe(1);
+
+    expect(new Length(1.5, LengthUnit.METRE).metres).toBe(1.5);
+
+    // @ts-ignore, for testing purposes
+    expect(new Length("1.5", LengthUnit.METRE).metres).toBe(1.5);
+
+    expect(new Length(1, LengthUnit.METRE).add(new Length(1, LengthUnit.METRE)).metres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Length(1, LengthUnit.METRE).add(new Length('1', LengthUnit.METRE)).metres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Length('1', LengthUnit.METRE).add(new Length(1, LengthUnit.METRE)).metres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Length('1', LengthUnit.METRE).add(new Length('1', LengthUnit.METRE)).metres).toBe(2);
+
+    expect(new Length(1.5, LengthUnit.METRE).add(new Length(1.5, LengthUnit.METRE)).metres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Length(1.5, LengthUnit.METRE).add(new Length('1.5', LengthUnit.METRE)).metres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Length('1.5', LengthUnit.METRE).add(new Length(1.5, LengthUnit.METRE)).metres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Length('1.5', LengthUnit.METRE).add(new Length('1.5', LengthUnit.METRE)).metres).toBe(3);
+
+    expect(new Length(1, LengthUnit.METRE).add(1, LengthUnit.METRE).metres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Length(1, LengthUnit.METRE).add('1', LengthUnit.METRE).metres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Length('1', LengthUnit.METRE).add(1, LengthUnit.METRE).metres).toBe(2);
+    // @ts-ignore, for testing purposes
+    expect(new Length('1', LengthUnit.METRE).add('1', LengthUnit.METRE).metres).toBe(2);
+
+    expect(new Length(1.5, LengthUnit.METRE).add(1.5, LengthUnit.METRE).metres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Length(1.5, LengthUnit.METRE).add('1.5', LengthUnit.METRE).metres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Length('1.5', LengthUnit.METRE).add(1.5, LengthUnit.METRE).metres).toBe(3);
+    // @ts-ignore, for testing purposes
+    expect(new Length('1.5', LengthUnit.METRE).add('1.5', LengthUnit.METRE).metres).toBe(3);
+});

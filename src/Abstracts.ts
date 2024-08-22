@@ -2,6 +2,7 @@ import {AreaUnit} from "./AreaUnit";
 import {LengthUnit} from "./LengthUnit";
 import {floatsEqual} from "./Helpers";
 import numeral from "numeral";
+import {toNumber} from "lodash";
 
 export type LengthArg = AbstractLength | number;
 export type LengthUnitArg = LengthUnit | number;
@@ -13,7 +14,7 @@ abstract class AbstractMeasurement{
     protected value: number;
 
     protected constructor(value: number) {
-        this.value = value;
+        this.value = toNumber(value);
     }
 
     public isZero(): boolean {
