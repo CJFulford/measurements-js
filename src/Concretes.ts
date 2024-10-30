@@ -104,6 +104,10 @@ export class Length extends AbstractLength implements Mutable {
     toImmutable(): LengthImmutable {
         return new LengthImmutable(this.value, this.unit);
     }
+
+    static zero(): Length {
+        return new Length(0, LengthUnit.METRE);
+    }
 }
 
 export class LengthImmutable extends AbstractLength implements Immutable {
@@ -196,6 +200,10 @@ export class LengthImmutable extends AbstractLength implements Immutable {
 
     toMutable(): Length {
         return new Length(this.value, this.unit);
+    }
+
+    static zero(): LengthImmutable {
+        return new LengthImmutable(0, LengthUnit.METRE);
     }
 }
 
@@ -291,6 +299,10 @@ export class Area extends AbstractArea implements Mutable{
     toImmutable(): AreaImmutable {
         return new AreaImmutable(this.value, this.unit);
     }
+
+    static zero(): Area {
+        return new Area(0, AreaUnit.SQUARE_METRE);
+    }
 }
 
 export class AreaImmutable extends AbstractArea implements Immutable{
@@ -381,5 +393,9 @@ export class AreaImmutable extends AbstractArea implements Immutable{
 
     toMutable(): Area {
         return new Area(this.value, this.unit);
+    }
+
+    static zero(): AreaImmutable {
+        return new AreaImmutable(0, AreaUnit.SQUARE_METRE);
     }
 }
