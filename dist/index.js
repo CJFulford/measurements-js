@@ -134,9 +134,10 @@ function floatsEqual(a, b, precision = 5) {
 
 // src/Abstracts.ts
 import numeral from "numeral";
+import { toNumber } from "lodash";
 var AbstractMeasurement = class {
   constructor(value) {
-    this.value = value;
+    this.value = toNumber(value);
   }
   isZero() {
     return floatsEqual(this.value, 0);
@@ -308,6 +309,9 @@ var Length = class _Length extends AbstractLength {
   toImmutable() {
     return new LengthImmutable(this.value, this.unit);
   }
+  static zero() {
+    return new _Length(0, LengthUnit.METRE);
+  }
 };
 var LengthImmutable = class _LengthImmutable extends AbstractLength {
   constructor(value, unit) {
@@ -352,6 +356,9 @@ var LengthImmutable = class _LengthImmutable extends AbstractLength {
   }
   toMutable() {
     return new Length(this.value, this.unit);
+  }
+  static zero() {
+    return new _LengthImmutable(0, LengthUnit.METRE);
   }
 };
 var Area = class _Area extends AbstractArea {
@@ -400,6 +407,9 @@ var Area = class _Area extends AbstractArea {
   toImmutable() {
     return new AreaImmutable(this.value, this.unit);
   }
+  static zero() {
+    return new _Area(0, AreaUnit.SQUARE_METRE);
+  }
 };
 var AreaImmutable = class _AreaImmutable extends AbstractArea {
   constructor(value, unit) {
@@ -443,8 +453,13 @@ var AreaImmutable = class _AreaImmutable extends AbstractArea {
   toMutable() {
     return new Area(this.value, this.unit);
   }
+  static zero() {
+    return new _AreaImmutable(0, AreaUnit.SQUARE_METRE);
+  }
 };
 export {
+  AbstractArea,
+  AbstractLength,
   Area,
   AreaImmutable,
   AreaUnit,

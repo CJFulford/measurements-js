@@ -172,6 +172,7 @@ declare class Length extends AbstractLength implements Mutable {
     isGreaterThanOrEqualTo(length: AbstractLength): boolean;
     isGreaterThanOrEqualTo(length: number, unit: number): boolean;
     toImmutable(): LengthImmutable;
+    static zero(): Length;
 }
 declare class LengthImmutable extends AbstractLength implements Immutable {
     constructor(value: number, unit: LengthUnitArg);
@@ -196,6 +197,7 @@ declare class LengthImmutable extends AbstractLength implements Immutable {
     isGreaterThanOrEqualTo(length: AbstractLength): boolean;
     isGreaterThanOrEqualTo(length: number, unit: number): boolean;
     toMutable(): Length;
+    static zero(): LengthImmutable;
 }
 declare class Area extends AbstractArea implements Mutable {
     constructor(value: number, unit: AreaUnitArg);
@@ -220,6 +222,7 @@ declare class Area extends AbstractArea implements Mutable {
     isGreaterThanOrEqualTo(area: AbstractArea): boolean;
     isGreaterThanOrEqualTo(area: number, unit: number): boolean;
     toImmutable(): AreaImmutable;
+    static zero(): Area;
 }
 declare class AreaImmutable extends AbstractArea implements Immutable {
     constructor(value: number, unit: AreaUnitArg);
@@ -244,6 +247,7 @@ declare class AreaImmutable extends AbstractArea implements Immutable {
     isGreaterThanOrEqualTo(area: AbstractArea): boolean;
     isGreaterThanOrEqualTo(area: number, unit: number): boolean;
     toMutable(): Area;
+    static zero(): AreaImmutable;
 }
 
-export { Area, AreaImmutable, AreaUnit, Length, LengthImmutable, LengthUnit };
+export { AbstractArea, AbstractLength, Area, AreaImmutable, AreaUnit, Length, LengthImmutable, LengthUnit };
