@@ -23,6 +23,11 @@ test("Formatting", () => {
     expect(length4.format(0, LengthUnit.INCH, 'name')).toBe("2 inches");
     expect(length4.format(0, LengthUnit.INCH, 'symbol')).toBe("2\"");
 
+    const length5 = new Length(2, LengthUnit.INCH);
+    expect(length5.format(2, LengthUnit.INCH)).toBe("2.00in");
+    expect(length5.format(2, LengthUnit.INCH, 'name')).toBe("2.00 inches");
+    expect(length5.format(2, LengthUnit.INCH, 'symbol')).toBe("2.00\"");
+
     const area1 = new Area(1, AreaUnit.SQUARE_METRE);
     expect(area1.format(0, AreaUnit.SQUARE_METRE)).toBe("1m²");
     expect(area1.format(0, AreaUnit.SQUARE_METRE, 'name')).toBe("1 square metre");
@@ -38,4 +43,8 @@ test("Formatting", () => {
     const area4 = new Area(2, AreaUnit.SQUARE_INCH);
     expect(area4.format(0, AreaUnit.SQUARE_INCH)).toBe("2in²");
     expect(area4.format(0, AreaUnit.SQUARE_INCH, 'name')).toBe("2 square inches");
+
+    const area5 = new Area(2, AreaUnit.SQUARE_INCH);
+    expect(area5.format(2, AreaUnit.SQUARE_INCH)).toBe("2.00in²");
+    expect(area5.format(2, AreaUnit.SQUARE_INCH, 'name')).toBe("2.00 square inches");
 });
