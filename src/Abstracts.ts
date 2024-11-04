@@ -128,7 +128,10 @@ export abstract class AbstractLength extends AbstractMeasurement{
     abstract isGreaterThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean;
 
     format(decimals: number, unit: LengthUnitArg, type: "name" | "acronym" | "symbol" = "acronym"): string {
-        const number = numeral(this.getValue(unit)).format();
+
+        const format = '0,0' + (decimals > 0 ? '.' + '0'.repeat(decimals) : '');
+
+        const number = numeral(this.getValue(unit)).format(format);
 
         unit = unit instanceof LengthUnit ? unit : LengthUnit.getById(unit as number);
 
@@ -238,7 +241,9 @@ export abstract class AbstractArea extends AbstractMeasurement{
     abstract isGreaterThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean;
 
     format(decimals: number, unit: AreaUnitArg, type: "name" | "acronym" = "acronym"): string {
-        const number = numeral(this.getValue(unit)).format();
+        const format = '0,0' + (decimals > 0 ? '.' + '0'.repeat(decimals) : '');
+
+        const number = numeral(this.getValue(unit)).format(format);
 
         unit = unit instanceof AreaUnit ? unit : AreaUnit.getById(unit as number);
 
