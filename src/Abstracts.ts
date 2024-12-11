@@ -3,6 +3,7 @@ import {LengthUnit} from "./LengthUnit";
 import {floatsEqual} from "./Helpers";
 import numeral from "numeral";
 import {toNumber} from "lodash";
+import {AreaImmutable, LengthImmutable} from "./Concretes";
 
 export type LengthArg = AbstractLength | number;
 export type LengthUnitArg = LengthUnit | number;
@@ -10,7 +11,10 @@ export type LengthUnitArg = LengthUnit | number;
 export type AreaArg = AbstractArea | number;
 export type AreaUnitArg = AreaUnit | number;
 
-abstract class AbstractMeasurement{
+type lengthFormatType = "name" | "acronym" | "symbol";
+type areaFormatType = "name" | "acronym";
+
+abstract class AbstractMeasurement {
     protected value: number;
 
     protected constructor(value: number) {
@@ -42,7 +46,7 @@ abstract class AbstractMeasurement{
     }
 }
 
-export abstract class AbstractLength extends AbstractMeasurement{
+export abstract class AbstractLength extends AbstractMeasurement {
     protected unit: LengthUnit;
 
     protected constructor(value: number, unit: LengthUnitArg) {
@@ -127,7 +131,7 @@ export abstract class AbstractLength extends AbstractMeasurement{
     abstract isGreaterThanOrEqualTo(length: number, unit: number): boolean;
     abstract isGreaterThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean;
 
-    format(decimals: number, unit: LengthUnitArg, type: "name" | "acronym" | "symbol" = "acronym"): string {
+    format(decimals: number, unit: LengthUnitArg, type: lengthFormatType = "acronym"): string {
 
         const format = '0,0' + (decimals > 0 ? '.' + '0'.repeat(decimals) : '');
 
@@ -152,9 +156,44 @@ export abstract class AbstractLength extends AbstractMeasurement{
 
         return `${number}${suffix}`;
     }
+
+    multiFormat(decimals: number, units: Array<LengthUnitArg>, type: lengthFormatType = 'acronym', separator: string = ','): string {
+
+        units.sort((a, b) => {
+            a = a instanceof LengthUnit ? a : LengthUnit.getById(a as number);
+            b = b instanceof LengthUnit ? b : LengthUnit.getById(b as number);
+            return b.baseUnitsPer - a.baseUnitsPer;
+        });
+
+        const result = [];
+        let remaining = new LengthImmutable(this.value, this.unit);
+        for (let i = 0; i < units.length; i++) {
+            const unit = units[i];
+            const isLastUnit = i === units.length - 1;
+
+            let portion;
+            let portionDecimals;
+            if (isLastUnit) {
+                portion = remaining;
+                portionDecimals = decimals;
+            } else {
+                portion = new LengthImmutable(Math.floor(remaining.getValue(unit)), unit);
+                portionDecimals = 0;
+                remaining = remaining.sub(portion);
+
+                if (portion.isZero()) {
+                    continue;
+                }
+            }
+
+            result.push(portion.format(portionDecimals, unit, type));
+        }
+
+        return result.join(separator);
+    }
 }
 
-export abstract class AbstractArea extends AbstractMeasurement{
+export abstract class AbstractArea extends AbstractMeasurement {
 
     protected unit: AreaUnit;
 
@@ -260,5 +299,40 @@ export abstract class AbstractArea extends AbstractMeasurement{
         }
 
         return `${number}${suffix}`;
+    }
+
+    multiFormat(decimals: number, units: Array<AreaUnitArg>, type: areaFormatType = 'acronym', separator: string = ','): string {
+
+        units.sort((a, b) => {
+            a = a instanceof AreaUnit ? a : AreaUnit.getById(a as number);
+            b = b instanceof AreaUnit ? b : AreaUnit.getById(b as number);
+            return b.baseUnitsPer - a.baseUnitsPer;
+        });
+
+        const result = [];
+        let remaining = new AreaImmutable(this.value, this.unit);
+        for (let i = 0; i < units.length; i++) {
+            const unit = units[i];
+            const isLastUnit = i === units.length - 1;
+
+            let portion;
+            let portionDecimals;
+            if (isLastUnit) {
+                portion = remaining;
+                portionDecimals = decimals;
+            } else {
+                portion = new AreaImmutable(Math.floor(remaining.getValue(unit)), unit);
+                portionDecimals = 0;
+                remaining = remaining.sub(portion);
+
+                if (portion.isZero()) {
+                    continue;
+                }
+            }
+
+            result.push(portion.format(portionDecimals, unit, type));
+        }
+
+        return result.join(separator);
     }
 }
