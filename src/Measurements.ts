@@ -138,6 +138,10 @@ export abstract class AbstractLength extends AbstractMeasurement {
     abstract isGreaterThanOrEqualTo(length: number, unit: number): boolean;
     abstract isGreaterThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean;
 
+    abstract toMutable(): Length;
+
+    abstract toImmutable(): LengthImmutable;
+
     format(decimals: number, unit: LengthUnitArg, type: lengthFormatType = "acronym"): string {
 
         const format = '0,0' + (decimals > 0 ? '.' + '0'.repeat(decimals) : '');
@@ -285,6 +289,10 @@ export abstract class AbstractArea extends AbstractMeasurement {
     abstract isGreaterThanOrEqualTo(area: AbstractArea): boolean;
     abstract isGreaterThanOrEqualTo(area: number, unit: number): boolean;
     abstract isGreaterThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean;
+
+    abstract toMutable(): Area;
+
+    abstract toImmutable(): AreaImmutable;
 
     format(decimals: number, unit: AreaUnitArg, type: "name" | "acronym" = "acronym"): string {
         const format = '0,0' + (decimals > 0 ? '.' + '0'.repeat(decimals) : '');
@@ -434,6 +442,10 @@ export class Length extends AbstractLength implements Mutable {
             : this.isGreaterThanOrEqualTo(new Length(length, unit as LengthUnitArg));
     }
 
+    toMutable(): Length {
+        return new Length(this.value, this.unit);
+    }
+
     toImmutable(): LengthImmutable {
         return new LengthImmutable(this.value, this.unit);
     }
@@ -535,6 +547,10 @@ export class LengthImmutable extends AbstractLength implements Immutable {
         return new Length(this.value, this.unit);
     }
 
+    toImmutable(): LengthImmutable {
+        return this;
+    }
+
     static zero(): LengthImmutable {
         return new LengthImmutable(0, LengthUnit.METRE);
     }
@@ -627,6 +643,10 @@ export class Area extends AbstractArea implements Mutable {
         return area instanceof AbstractArea
             ? this.isGreaterThan(area) || this.isEqualTo(area)
             : this.isGreaterThanOrEqualTo(new Area(area, unit as AreaUnitArg));
+    }
+
+    toMutable(): Area {
+        return new Area(this.value, this.unit);
     }
 
     toImmutable(): AreaImmutable {
@@ -726,6 +746,10 @@ export class AreaImmutable extends AbstractArea implements Immutable {
 
     toMutable(): Area {
         return new Area(this.value, this.unit);
+    }
+
+    toImmutable(): AreaImmutable {
+        return this;
     }
 
     static zero(): AreaImmutable {
