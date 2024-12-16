@@ -4,11 +4,11 @@ import {floatsEqual} from "./Helpers";
 import numeral from "numeral";
 import {toNumber} from "lodash";
 
-export type LengthArg = AbstractLength | number;
-export type LengthUnitArg = LengthUnit | number;
+type LengthArg = AbstractLength | number;
+type LengthUnitArg = LengthUnit | number;
 
-export type AreaArg = AbstractArea | number;
-export type AreaUnitArg = AreaUnit | number;
+type AreaArg = AbstractArea | number;
+type AreaUnitArg = AreaUnit | number;
 
 type lengthFormatType = "name" | "acronym" | "symbol";
 type areaFormatType = "name" | "acronym";
