@@ -1,5 +1,5 @@
 import {AreaUnit} from "../src/AreaUnit";
-import {Area} from "../src/Concretes";
+import {Area} from "../src/Measurements";
 
 test('Area Basic Multi Formatting', () => {
     const area = new Area(10.5, AreaUnit.SQUARE_FOOT);

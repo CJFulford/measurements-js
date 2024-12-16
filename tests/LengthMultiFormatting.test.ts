@@ -1,5 +1,5 @@
 import {LengthUnit} from "../src/LengthUnit";
-import {Length} from "../src/Concretes";
+import {Length} from "../src/Measurements";
 
 test('Length Basic Multi Formatting', () => {
     const length = new Length(10.5, LengthUnit.FOOT);

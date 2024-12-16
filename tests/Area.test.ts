@@ -1,6 +1,6 @@
 import {AreaUnit} from "../src/AreaUnit";
 import {LengthUnit} from "../src/LengthUnit";
-import {Area, Length} from "../src/Concretes";
+import {Area, Length} from "../src/Measurements";
 
 test('Addition', () => {
     const area1 = new Area(1, AreaUnit.SQUARE_METRE);
