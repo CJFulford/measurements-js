@@ -1,6 +1,6 @@
 import {AreaUnit} from "../src/AreaUnit";
 import {LengthUnit} from "../src/LengthUnit";
-import {Area, Length} from "../src/Measurements";
+import {Area, AreaImmutable, Length} from "../src/Measurements";
 
 test('Addition', () => {
     const area1 = new Area(1, AreaUnit.SQUARE_METRE);
@@ -215,4 +215,21 @@ test('Handling of non number types', () => {
     expect(new Area('1.5', AreaUnit.SQUARE_METRE).add(1.5, AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
     // @ts-ignore, for testing purposes
     expect(new Area('1.5', AreaUnit.SQUARE_METRE).add('1.5', AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
+});
+
+test('Comparison of different units', () => {
+    expect(new Area(1, AreaUnit.SQUARE_METRE).compare(new Area(1, AreaUnit.SQUARE_CENTIMETRE))).toBe(1);
+    expect(new Area(1, AreaUnit.SQUARE_METRE).compare(new Area(1, AreaUnit.SQUARE_MILLIMETRE))).toBe(1);
+    expect(new Area(1, AreaUnit.SQUARE_METRE).compare(new Area(1, AreaUnit.SQUARE_METRE))).toBe(0);
+    expect(new Area(1, AreaUnit.SQUARE_METRE).compare(new Area(1, AreaUnit.SQUARE_KILOMETRE))).toBe(-1);
+    expect(new Area(1, AreaUnit.SQUARE_METRE).compare(new Area(1, AreaUnit.SQUARE_INCH))).toBe(1);
+    expect(new Area(1, AreaUnit.SQUARE_METRE).compare(new Area(1, AreaUnit.SQUARE_FOOT))).toBe(1);
+    expect(new Area(1, AreaUnit.SQUARE_METRE).compare(new Area(1, AreaUnit.SQUARE_YARD))).toBe(1);
+    expect(new Area(1, AreaUnit.SQUARE_METRE).compare(new Area(1, AreaUnit.SQUARE_MILE))).toBe(-1);
+
+});
+
+test('Conversion', () => {
+    expect(Area.zero().toImmutable()).toBeInstanceOf(AreaImmutable);
+    expect(AreaImmutable.zero().toMutable()).toBeInstanceOf(Area);
 });

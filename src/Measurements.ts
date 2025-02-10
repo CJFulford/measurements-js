@@ -13,13 +13,15 @@ type AreaUnitArg = AreaUnit | number;
 type lengthFormatType = "name" | "acronym" | "symbol";
 type areaFormatType = "name" | "acronym";
 
-interface Mutable {
-    toImmutable(): Immutable;
+type TMutable = {
+    toImmutable(): TImmutable;
 }
 
-interface Immutable {
-    toMutable(): Mutable;
+type TImmutable = {
+    toMutable(): TMutable;
 }
+
+type CompareReturnType = -1 | 0 | 1;
 
 abstract class AbstractMeasurement {
     protected value: number;
@@ -202,6 +204,18 @@ export abstract class AbstractLength extends AbstractMeasurement {
 
         return result.join(separator);
     }
+
+    compare(length: AbstractLength): CompareReturnType;
+    compare(length: number, unit: LengthUnitArg): CompareReturnType;
+    compare(length: LengthArg, unit?: LengthUnitArg): CompareReturnType {
+        if (length instanceof AbstractLength) {
+            return this.isEqualTo(length)
+                ? 0
+                : this.isLessThan(length) ? -1 : 1;
+        }
+
+        return this.compare(new Length(length, unit as LengthUnitArg));
+    }
 }
 
 export abstract class AbstractArea extends AbstractMeasurement {
@@ -350,9 +364,22 @@ export abstract class AbstractArea extends AbstractMeasurement {
 
         return result.join(separator);
     }
+
+    compare(area: AbstractArea): CompareReturnType;
+    compare(area: number, unit: AreaUnitArg): CompareReturnType;
+    compare(area: AreaArg, unit?: AreaUnitArg): CompareReturnType {
+
+        if (area instanceof AbstractArea) {
+            return this.isEqualTo(area)
+                ? 0
+                : this.isLessThan(area) ? -1 : 1;
+        }
+
+        return this.compare(new Area(area, unit as AreaUnitArg));
+    }
 }
 
-export class Length extends AbstractLength implements Mutable {
+export class Length extends AbstractLength implements TMutable {
 
     constructor(value: number, unit: LengthUnitArg) {
         super(value, unit);
@@ -455,7 +482,7 @@ export class Length extends AbstractLength implements Mutable {
     }
 }
 
-export class LengthImmutable extends AbstractLength implements Immutable {
+export class LengthImmutable extends AbstractLength implements TImmutable {
 
     constructor(value: number, unit: LengthUnitArg) {
         super(value, unit);
@@ -556,7 +583,7 @@ export class LengthImmutable extends AbstractLength implements Immutable {
     }
 }
 
-export class Area extends AbstractArea implements Mutable {
+export class Area extends AbstractArea implements TMutable {
     constructor(value: number, unit: AreaUnitArg) {
         super(value, unit);
     }
@@ -658,7 +685,7 @@ export class Area extends AbstractArea implements Mutable {
     }
 }
 
-export class AreaImmutable extends AbstractArea implements Immutable {
+export class AreaImmutable extends AbstractArea implements TImmutable {
 
     constructor(value: number, unit: AreaUnitArg) {
         super(value, unit);
