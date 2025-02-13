@@ -1,5 +1,5 @@
 import {LengthUnit} from "../src/LengthUnit";
-import {Length} from "../src/Concretes";
+import {Length, LengthImmutable} from "../src/Measurements";
 
 test('Addition', () => {
     const length1 = new Length(1, LengthUnit.METRE);
@@ -202,4 +202,19 @@ test('Handling of non number types', () => {
     expect(new Length('1.5', LengthUnit.METRE).add(1.5, LengthUnit.METRE).metres).toBe(3);
     // @ts-ignore, for testing purposes
     expect(new Length('1.5', LengthUnit.METRE).add('1.5', LengthUnit.METRE).metres).toBe(3);
+});
+
+test('Comparison of different units', () => {
+    expect(new Length(1, LengthUnit.METRE).compare(new Length(100, LengthUnit.CENTIMETRE))).toBe(0);
+    expect(new Length(1, LengthUnit.METRE).compare(new Length(1000, LengthUnit.MILLIMETRE))).toBe(0);
+    expect(new Length(1, LengthUnit.METRE).compare(new Length(1, LengthUnit.METRE))).toBe(0);
+    expect(new Length(1, LengthUnit.METRE).compare(new Length(1, LengthUnit.FOOT))).toBe(1);
+    expect(new Length(1, LengthUnit.METRE).compare(new Length(1, LengthUnit.INCH))).toBe(1);
+    expect(new Length(1, LengthUnit.METRE).compare(new Length(1, LengthUnit.YARD))).toBe(1);
+    expect(new Length(1, LengthUnit.METRE).compare(new Length(1, LengthUnit.MILE))).toBe(-1);
+});
+
+test('Conversion', () => {
+    expect(Length.zero().toImmutable()).toBeInstanceOf(LengthImmutable);
+    expect(LengthImmutable.zero().toMutable()).toBeInstanceOf(Length);
 });
