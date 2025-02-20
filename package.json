@@ -1,6 +1,6 @@
 {
   "name": "@cjfulford/measurements-js",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A utility to abstract away units when storing, displaying, converting, and running calculations on various measurements",
   "main": "dist/index.js",
   "module": "dist/index.js",

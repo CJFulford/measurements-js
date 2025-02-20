@@ -23,6 +23,7 @@ type TImmutable = {
 
 type CompareReturnType = -1 | 0 | 1;
 
+
 abstract class AbstractMeasurement {
     protected value: number;
 
