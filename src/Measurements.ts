@@ -441,7 +441,7 @@ export class Length extends AbstractLength implements TMutable {
     isLessThan(length: number, unit: number): boolean;
     isLessThan(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
-            ? this.metres < length.metres
+            ? this.metres < length.metres && !this.isEqualTo(length)
             : this.isLessThan(new Length(length, unit as LengthUnitArg));
     }
 
@@ -457,7 +457,7 @@ export class Length extends AbstractLength implements TMutable {
     isGreaterThan(length: number, unit: number): boolean;
     isGreaterThan(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
-            ? this.metres > length.metres
+            ? this.metres > length.metres && !this.isEqualTo(length)
             : this.isGreaterThan(new Length(length, unit as LengthUnitArg));
     }
 
@@ -542,7 +542,7 @@ export class LengthImmutable extends AbstractLength implements TImmutable {
     isLessThan(length: number, unit: number): boolean;
     isLessThan(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
-            ? this.metres < length.metres
+            ? this.metres < length.metres && !this.isEqualTo(length)
             : this.isLessThan(new LengthImmutable(length, unit as LengthUnitArg));
     }
 
@@ -558,7 +558,7 @@ export class LengthImmutable extends AbstractLength implements TImmutable {
     isGreaterThan(length: number, unit: number): boolean;
     isGreaterThan(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
-            ? this.metres > length.metres
+            ? this.metres > length.metres && !this.isEqualTo(length)
             : this.isGreaterThan(new LengthImmutable(length, unit as LengthUnitArg));
     }
 
@@ -644,7 +644,7 @@ export class Area extends AbstractArea implements TMutable {
     isLessThan(area: number, unit: number): boolean;
     isLessThan(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
-            ? this.squareMetres < area.squareMetres
+            ? this.squareMetres < area.squareMetres && !this.isEqualTo(area)
             : this.isLessThan(new Area(area, unit as AreaUnitArg));
     }
 
@@ -660,7 +660,7 @@ export class Area extends AbstractArea implements TMutable {
     isGreaterThan(area: number, unit: number): boolean;
     isGreaterThan(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
-            ? this.squareMetres > area.squareMetres
+            ? this.squareMetres > area.squareMetres && !this.isEqualTo(area)
             : this.isGreaterThan(new Area(area, unit as AreaUnitArg));
     }
 
@@ -743,7 +743,7 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
     isLessThan(area: number, unit: number): boolean;
     isLessThan(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
-            ? this.squareMetres < area.squareMetres
+            ? this.squareMetres < area.squareMetres && !this.isEqualTo(area)
             : this.isLessThan(new AreaImmutable(area, unit as AreaUnitArg));
     }
 
@@ -759,7 +759,7 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
     isGreaterThan(area: number, unit: number): boolean;
     isGreaterThan(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
-            ? this.squareMetres > area.squareMetres
+            ? this.squareMetres > area.squareMetres && !this.isEqualTo(area)
             : this.isGreaterThan(new AreaImmutable(area, unit as AreaUnitArg));
     }
 
