@@ -122,23 +122,23 @@ export abstract class AbstractLength extends AbstractMeasurement {
     abstract divByLength(length: LengthArg, unit?: LengthUnitArg): number;
 
     abstract isEqualTo(length: AbstractLength): boolean;
-    abstract isEqualTo(length: number, unit: number): boolean;
+    abstract isEqualTo(length: number, unit: LengthUnitArg): boolean;
     abstract isEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean;
 
     abstract isLessThan(length: AbstractLength): boolean;
-    abstract isLessThan(length: number, unit: number): boolean;
+    abstract isLessThan(length: number, unit: LengthUnitArg): boolean;
     abstract isLessThan(length: LengthArg, unit?: LengthUnitArg): boolean;
 
     abstract isLessThanOrEqualTo(length: AbstractLength): boolean;
-    abstract isLessThanOrEqualTo(length: number, unit: number): boolean;
+    abstract isLessThanOrEqualTo(length: number, unit: LengthUnitArg): boolean;
     abstract isLessThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean;
 
     abstract isGreaterThan(length: AbstractLength): boolean;
-    abstract isGreaterThan(length: number, unit: number): boolean;
+    abstract isGreaterThan(length: number, unit: LengthUnitArg): boolean;
     abstract isGreaterThan(length: LengthArg, unit?: LengthUnitArg): boolean;
 
     abstract isGreaterThanOrEqualTo(length: AbstractLength): boolean;
-    abstract isGreaterThanOrEqualTo(length: number, unit: number): boolean;
+    abstract isGreaterThanOrEqualTo(length: number, unit: LengthUnitArg): boolean;
     abstract isGreaterThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean;
 
     abstract toMutable(): Length;
@@ -286,23 +286,23 @@ export abstract class AbstractArea extends AbstractMeasurement {
     abstract divByArea(area: AreaArg, unit?: AreaUnitArg): number;
 
     abstract isEqualTo(area: AbstractArea): boolean;
-    abstract isEqualTo(area: number, unit: number): boolean;
+    abstract isEqualTo(area: number, unit: AreaUnitArg): boolean;
     abstract isEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean;
 
     abstract isLessThan(area: AbstractArea): boolean;
-    abstract isLessThan(area: number, unit: number): boolean;
+    abstract isLessThan(area: number, unit: AreaUnitArg): boolean;
     abstract isLessThan(area: AreaArg, unit?: AreaUnitArg): boolean;
 
     abstract isLessThanOrEqualTo(area: AbstractArea): boolean;
-    abstract isLessThanOrEqualTo(area: number, unit: number): boolean;
+    abstract isLessThanOrEqualTo(area: number, unit: AreaUnitArg): boolean;
     abstract isLessThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean;
 
     abstract isGreaterThan(area: AbstractArea): boolean;
-    abstract isGreaterThan(area: number, unit: number): boolean;
+    abstract isGreaterThan(area: number, unit: AreaUnitArg): boolean;
     abstract isGreaterThan(area: AreaArg, unit?: AreaUnitArg): boolean;
 
     abstract isGreaterThanOrEqualTo(area: AbstractArea): boolean;
-    abstract isGreaterThanOrEqualTo(area: number, unit: number): boolean;
+    abstract isGreaterThanOrEqualTo(area: number, unit: AreaUnitArg): boolean;
     abstract isGreaterThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean;
 
     abstract toMutable(): Area;
@@ -431,7 +431,7 @@ export class Length extends AbstractLength implements TMutable {
     }
 
     isEqualTo(length: AbstractLength): boolean;
-    isEqualTo(length: number, unit: number): boolean;
+    isEqualTo(length: number, unit: LengthUnitArg): boolean;
     isEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? floatsEqual(this.metres, length.metres)
@@ -439,7 +439,7 @@ export class Length extends AbstractLength implements TMutable {
     }
 
     isLessThan(length: AbstractLength): boolean;
-    isLessThan(length: number, unit: number): boolean;
+    isLessThan(length: number, unit: LengthUnitArg): boolean;
     isLessThan(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? this.metres < length.metres && !this.isEqualTo(length)
@@ -447,7 +447,7 @@ export class Length extends AbstractLength implements TMutable {
     }
 
     isLessThanOrEqualTo(length: AbstractLength): boolean;
-    isLessThanOrEqualTo(length: number, unit: number): boolean;
+    isLessThanOrEqualTo(length: number, unit: LengthUnitArg): boolean;
     isLessThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? this.isLessThan(length) || this.isEqualTo(length)
@@ -455,7 +455,7 @@ export class Length extends AbstractLength implements TMutable {
     }
 
     isGreaterThan(length: AbstractLength): boolean;
-    isGreaterThan(length: number, unit: number): boolean;
+    isGreaterThan(length: number, unit: LengthUnitArg): boolean;
     isGreaterThan(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? this.metres > length.metres && !this.isEqualTo(length)
@@ -463,7 +463,7 @@ export class Length extends AbstractLength implements TMutable {
     }
 
     isGreaterThanOrEqualTo(length: AbstractLength): boolean;
-    isGreaterThanOrEqualTo(length: number, unit: number): boolean;
+    isGreaterThanOrEqualTo(length: number, unit: LengthUnitArg): boolean;
     isGreaterThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? this.isGreaterThan(length) || this.isEqualTo(length)
@@ -532,7 +532,7 @@ export class LengthImmutable extends AbstractLength implements TImmutable {
     }
 
     isEqualTo(length: AbstractLength): boolean;
-    isEqualTo(length: number, unit: number): boolean;
+    isEqualTo(length: number, unit: LengthUnitArg): boolean;
     isEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? floatsEqual(this.metres, length.metres)
@@ -540,7 +540,7 @@ export class LengthImmutable extends AbstractLength implements TImmutable {
     }
 
     isLessThan(length: AbstractLength): boolean;
-    isLessThan(length: number, unit: number): boolean;
+    isLessThan(length: number, unit: LengthUnitArg): boolean;
     isLessThan(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? this.metres < length.metres && !this.isEqualTo(length)
@@ -548,7 +548,7 @@ export class LengthImmutable extends AbstractLength implements TImmutable {
     }
 
     isLessThanOrEqualTo(length: AbstractLength): boolean;
-    isLessThanOrEqualTo(length: number, unit: number): boolean;
+    isLessThanOrEqualTo(length: number, unit: LengthUnitArg): boolean;
     isLessThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? this.isLessThan(length) || this.isEqualTo(length)
@@ -556,7 +556,7 @@ export class LengthImmutable extends AbstractLength implements TImmutable {
     }
 
     isGreaterThan(length: AbstractLength): boolean;
-    isGreaterThan(length: number, unit: number): boolean;
+    isGreaterThan(length: number, unit: LengthUnitArg): boolean;
     isGreaterThan(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? this.metres > length.metres && !this.isEqualTo(length)
@@ -564,7 +564,7 @@ export class LengthImmutable extends AbstractLength implements TImmutable {
     }
 
     isGreaterThanOrEqualTo(length: AbstractLength): boolean;
-    isGreaterThanOrEqualTo(length: number, unit: number): boolean;
+    isGreaterThanOrEqualTo(length: number, unit: LengthUnitArg): boolean;
     isGreaterThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean {
         return length instanceof AbstractLength
             ? this.isGreaterThan(length) || this.isEqualTo(length)
@@ -634,7 +634,7 @@ export class Area extends AbstractArea implements TMutable {
     }
 
     isEqualTo(area: AbstractArea): boolean;
-    isEqualTo(area: number, unit: number): boolean;
+    isEqualTo(area: number, unit: AreaUnitArg): boolean;
     isEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? floatsEqual(this.squareMetres, area.squareMetres)
@@ -642,7 +642,7 @@ export class Area extends AbstractArea implements TMutable {
     }
 
     isLessThan(area: AbstractArea): boolean;
-    isLessThan(area: number, unit: number): boolean;
+    isLessThan(area: number, unit: AreaUnitArg): boolean;
     isLessThan(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? this.squareMetres < area.squareMetres && !this.isEqualTo(area)
@@ -650,7 +650,7 @@ export class Area extends AbstractArea implements TMutable {
     }
 
     isLessThanOrEqualTo(area: AbstractArea): boolean;
-    isLessThanOrEqualTo(area: number, unit: number): boolean;
+    isLessThanOrEqualTo(area: number, unit: AreaUnitArg): boolean;
     isLessThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? this.isLessThan(area) || this.isEqualTo(area)
@@ -658,7 +658,7 @@ export class Area extends AbstractArea implements TMutable {
     }
 
     isGreaterThan(area: AbstractArea): boolean;
-    isGreaterThan(area: number, unit: number): boolean;
+    isGreaterThan(area: number, unit: AreaUnitArg): boolean;
     isGreaterThan(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? this.squareMetres > area.squareMetres && !this.isEqualTo(area)
@@ -666,7 +666,7 @@ export class Area extends AbstractArea implements TMutable {
     }
 
     isGreaterThanOrEqualTo(area: AbstractArea): boolean;
-    isGreaterThanOrEqualTo(area: number, unit: number): boolean;
+    isGreaterThanOrEqualTo(area: number, unit: AreaUnitArg): boolean;
     isGreaterThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? this.isGreaterThan(area) || this.isEqualTo(area)
@@ -733,7 +733,7 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
     }
 
     isEqualTo(area: AbstractArea): boolean;
-    isEqualTo(area: number, unit: number): boolean;
+    isEqualTo(area: number, unit: AreaUnitArg): boolean;
     isEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? floatsEqual(this.squareMetres, area.squareMetres)
@@ -741,7 +741,7 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
     }
 
     isLessThan(area: AbstractArea): boolean;
-    isLessThan(area: number, unit: number): boolean;
+    isLessThan(area: number, unit: AreaUnitArg): boolean;
     isLessThan(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? this.squareMetres < area.squareMetres && !this.isEqualTo(area)
@@ -749,7 +749,7 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
     }
 
     isLessThanOrEqualTo(area: AbstractArea): boolean;
-    isLessThanOrEqualTo(area: number, unit: number): boolean;
+    isLessThanOrEqualTo(area: number, unit: AreaUnitArg): boolean;
     isLessThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? this.isLessThan(area) || this.isEqualTo(area)
@@ -757,7 +757,7 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
     }
 
     isGreaterThan(area: AbstractArea): boolean;
-    isGreaterThan(area: number, unit: number): boolean;
+    isGreaterThan(area: number, unit: AreaUnitArg): boolean;
     isGreaterThan(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? this.squareMetres > area.squareMetres && !this.isEqualTo(area)
@@ -765,7 +765,7 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
     }
 
     isGreaterThanOrEqualTo(area: AbstractArea): boolean;
-    isGreaterThanOrEqualTo(area: number, unit: number): boolean;
+    isGreaterThanOrEqualTo(area: number, unit: AreaUnitArg): boolean;
     isGreaterThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean {
         return area instanceof AbstractArea
             ? this.isGreaterThan(area) || this.isEqualTo(area)
