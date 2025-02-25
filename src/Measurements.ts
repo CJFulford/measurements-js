@@ -149,7 +149,7 @@ export abstract class AbstractLength extends AbstractMeasurement {
 
         const format = '0,0' + (decimals > 0 ? '.' + '0'.repeat(decimals) : '');
 
-        const number = numeral(this.getValue(unit)).format(format);
+        const number = numeral(this.isZero() ? 0 : this.getValue(unit)).format(format);
 
         unit = unit instanceof LengthUnit ? unit : LengthUnit.getById(unit as number);
 
@@ -194,6 +194,11 @@ export abstract class AbstractLength extends AbstractMeasurement {
                 portion = new LengthImmutable(Math.floor(remaining.getValue(unit)), unit);
                 portionDecimals = 0;
                 remaining = remaining.sub(portion);
+
+                if (remaining.isEqualTo(1, unit)) {
+                    portion = portion.add(1, unit);
+                    remaining = LengthImmutable.zero();
+                }
 
                 if (portion.isZero()) {
                     continue;
@@ -312,7 +317,7 @@ export abstract class AbstractArea extends AbstractMeasurement {
     format(decimals: number, unit: AreaUnitArg, type: "name" | "acronym" = "acronym"): string {
         const format = '0,0' + (decimals > 0 ? '.' + '0'.repeat(decimals) : '');
 
-        const number = numeral(this.getValue(unit)).format(format);
+        const number = numeral(this.isZero() ? 0 : this.getValue(unit)).format(format);
 
         unit = unit instanceof AreaUnit ? unit : AreaUnit.getById(unit as number);
 
@@ -354,6 +359,11 @@ export abstract class AbstractArea extends AbstractMeasurement {
                 portion = new AreaImmutable(Math.floor(remaining.getValue(unit)), unit);
                 portionDecimals = 0;
                 remaining = remaining.sub(portion);
+
+                if (remaining.isEqualTo(1, unit)) {
+                    portion = portion.add(1, unit);
+                    remaining = AreaImmutable.zero();
+                }
 
                 if (portion.isZero()) {
                     continue;
