@@ -1009,3 +1009,199 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
     }
 }
 
+export class Volume extends AbstractVolume implements TMutable {
+    constructor(value: number, unit: VolumeUnitArg) {
+        super(value, unit);
+    }
+
+    add(volume: AbstractVolume): AbstractVolume;
+    add(volume: number, unit: VolumeUnitArg): AbstractVolume;
+    add(volume: VolumeArg, unit?: VolumeUnitArg): AbstractVolume {
+        const v = volume instanceof AbstractVolume ? volume : new Volume(volume, unit as VolumeUnitArg);
+        this.value += v.getValue(this.unit);
+        return this;
+    }
+
+    sub(volume: AbstractVolume): AbstractVolume;
+    sub(volume: number, unit: VolumeUnitArg): AbstractVolume;
+    sub(volume: VolumeArg, unit?: VolumeUnitArg): AbstractVolume {
+        const v = volume instanceof AbstractVolume ? volume : new Volume(volume, unit as VolumeUnitArg);
+        this.value -= v.getValue(this.unit);
+        return this;
+    }
+
+    mulByNumber(value: number): AbstractVolume {
+        this.value *= value;
+        return this;
+    }
+
+    divByNumber(value: number): AbstractVolume {
+        this.value /= value;
+        return this;
+    }
+
+    divByLength(length: AbstractLength): AbstractArea;
+    divByLength(length: number, unit: LengthUnitArg): AbstractArea;
+    divByLength(length: LengthArg, unit?: LengthUnitArg): AbstractArea {
+        const l = length instanceof AbstractLength ? length : new Length(length, unit as LengthUnitArg);
+        return new Area(this.cubeMetres / l.metres, AreaUnit.SQUARE_METRE);
+    }
+
+    divByArea(area: AbstractArea): AbstractLength;
+    divByArea(area: number, unit: AreaUnitArg): AbstractLength;
+    divByArea(area: AreaArg, unit?: AreaUnitArg): AbstractLength {
+        const a = area instanceof AbstractArea ? area : new Area(area, unit as AreaUnitArg);
+        return new Length(this.cubeMetres / a.squareMetres, LengthUnit.METRE);
+    }
+
+    divByVolume(volume: AbstractVolume): number;
+    divByVolume(volume: number, unit: VolumeUnitArg): number;
+    divByVolume(volume: VolumeArg, unit?: VolumeUnitArg): number {
+        const v = volume instanceof AbstractVolume ? volume : new Volume(volume, unit as VolumeUnitArg);
+        return this.cubeMetres / v.cubeMetres;
+    }
+
+    isEqualTo(volume: AbstractVolume): boolean;
+    isEqualTo(volume: number, unit: VolumeUnitArg): boolean;
+    isEqualTo(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new Volume(volume, unit as VolumeUnitArg);
+        return floatsEqual(this.cubeMetres, v.cubeMetres);
+    }
+
+    isLessThan(volume: AbstractVolume): boolean;
+    isLessThan(volume: number, unit: VolumeUnitArg): boolean;
+    isLessThan(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new Volume(volume, unit as VolumeUnitArg);
+        return this.cubeMetres < v.cubeMetres && !this.isEqualTo(v);
+    }
+
+    isLessThanOrEqualTo(volume: AbstractVolume): boolean;
+    isLessThanOrEqualTo(volume: number, unit: VolumeUnitArg): boolean;
+    isLessThanOrEqualTo(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new Volume(volume, unit as VolumeUnitArg);
+        return this.isLessThan(v) || this.isEqualTo(v);
+    }
+
+    isGreaterThan(volume: AbstractVolume): boolean;
+    isGreaterThan(volume: number, unit: VolumeUnitArg): boolean;
+    isGreaterThan(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new Volume(volume, unit as VolumeUnitArg);
+        return this.cubeMetres > v.cubeMetres && !this.isEqualTo(v);
+    }
+
+    isGreaterThanOrEqualTo(volume: AbstractVolume): boolean;
+    isGreaterThanOrEqualTo(volume: number, unit: VolumeUnitArg): boolean;
+    isGreaterThanOrEqualTo(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new Volume(volume, unit as VolumeUnitArg);
+        return this.isGreaterThan(v) || this.isEqualTo(v);
+    }
+
+    toMutable(): Volume {
+        return new Volume(this.value, this.unit);
+    }
+
+    toImmutable(): VolumeImmutable {
+        return new VolumeImmutable(this.value, this.unit);
+    }
+
+    static zero(): Volume {
+        return new Volume(0, VolumeUnit.CUBE_METRE);
+    }
+}
+
+export class VolumeImmutable extends AbstractVolume implements TImmutable {
+    constructor(value: number, unit: VolumeUnitArg) {
+        super(value, unit);
+    }
+
+    add(volume: AbstractVolume): AbstractVolume;
+    add(volume: number, unit: VolumeUnitArg): AbstractVolume;
+    add(volume: VolumeArg, unit?: VolumeUnitArg): AbstractVolume {
+        const v = volume instanceof AbstractVolume ? volume : new VolumeImmutable(volume, unit as VolumeUnitArg);
+        return new VolumeImmutable(this.value + v.getValue(this.unit), this.unit);
+    }
+
+    sub(volume: AbstractVolume): AbstractVolume;
+    sub(volume: number, unit: VolumeUnitArg): AbstractVolume;
+    sub(volume: VolumeArg, unit?: VolumeUnitArg): AbstractVolume {
+        const v = volume instanceof AbstractVolume ? volume : new VolumeImmutable(volume, unit as VolumeUnitArg);
+        return new VolumeImmutable(this.value - v.getValue(this.unit), this.unit);
+    }
+
+    mulByNumber(value: number): AbstractVolume {
+        return new VolumeImmutable(this.value * value, this.unit);
+    }
+
+    divByNumber(value: number): AbstractVolume {
+        return new VolumeImmutable(this.value / value, this.unit);
+    }
+
+    divByLength(length: AbstractLength): AbstractArea;
+    divByLength(length: number, unit: LengthUnitArg): AbstractArea;
+    divByLength(length: LengthArg, unit?: LengthUnitArg): AbstractArea {
+        const l = length instanceof AbstractLength ? length : new LengthImmutable(length, unit as LengthUnitArg);
+        return new AreaImmutable(this.cubeMetres / l.metres, AreaUnit.SQUARE_METRE);
+    }
+
+    divByArea(area: AbstractArea): AbstractLength;
+    divByArea(area: number, unit: AreaUnitArg): AbstractLength;
+    divByArea(area: AreaArg, unit?: AreaUnitArg): AbstractLength {
+        const a = area instanceof AbstractArea ? area : new AreaImmutable(area, unit as AreaUnitArg);
+        return new LengthImmutable(this.cubeMetres / a.squareMetres, LengthUnit.METRE);
+    }
+
+    divByVolume(volume: AbstractVolume): number;
+    divByVolume(volume: number, unit: VolumeUnitArg): number;
+    divByVolume(volume: VolumeArg, unit?: VolumeUnitArg): number {
+        const v = volume instanceof AbstractVolume ? volume : new VolumeImmutable(volume, unit as VolumeUnitArg);
+        return this.cubeMetres / v.cubeMetres;
+    }
+
+    isEqualTo(volume: AbstractVolume): boolean;
+    isEqualTo(volume: number, unit: VolumeUnitArg): boolean;
+    isEqualTo(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new VolumeImmutable(volume, unit as VolumeUnitArg);
+        return floatsEqual(this.cubeMetres, v.cubeMetres);
+    }
+
+    isLessThan(volume: AbstractVolume): boolean;
+    isLessThan(volume: number, unit: VolumeUnitArg): boolean;
+    isLessThan(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new VolumeImmutable(volume, unit as VolumeUnitArg);
+        return this.cubeMetres < v.cubeMetres && !this.isEqualTo(v);
+    }
+
+    isLessThanOrEqualTo(volume: AbstractVolume): boolean;
+    isLessThanOrEqualTo(volume: number, unit: VolumeUnitArg): boolean;
+    isLessThanOrEqualTo(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new VolumeImmutable(volume, unit as VolumeUnitArg);
+        return this.isLessThan(v) || this.isEqualTo(v);
+    }
+
+    isGreaterThan(volume: AbstractVolume): boolean;
+    isGreaterThan(volume: number, unit: VolumeUnitArg): boolean;
+    isGreaterThan(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new VolumeImmutable(volume, unit as VolumeUnitArg);
+        return this.cubeMetres > v.cubeMetres && !this.isEqualTo(v);
+    }
+
+    isGreaterThanOrEqualTo(volume: AbstractVolume): boolean;
+    isGreaterThanOrEqualTo(volume: number, unit: VolumeUnitArg): boolean;
+    isGreaterThanOrEqualTo(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
+        const v = volume instanceof AbstractVolume ? volume : new VolumeImmutable(volume, unit as VolumeUnitArg);
+        return this.isGreaterThan(v) || this.isEqualTo(v);
+    }
+
+    toMutable(): Volume {
+        return new Volume(this.value, this.unit);
+    }
+
+    toImmutable(): VolumeImmutable {
+        return this;
+    }
+
+    static zero(): VolumeImmutable {
+        return new VolumeImmutable(0, VolumeUnit.CUBE_METRE);
+    }
+}
+
