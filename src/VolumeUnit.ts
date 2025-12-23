@@ -41,14 +41,14 @@ export class VolumeUnit {
 
         VolumeUnit.units = [];
 
-        new VolumeUnit(VolumeUnit.CUBE_KILOMETRE, 'cube kilometre', 'cube kilometres', 'km³', LengthUnit.KILOMETRE);
-        new VolumeUnit(VolumeUnit.CUBE_METRE, 'cube metre', 'cube metres', 'm³', LengthUnit.METRE);
-        new VolumeUnit(VolumeUnit.CUBE_CENTIMETRE, 'cube centimetre', 'cube centimetres', 'cm³', LengthUnit.CENTIMETRE);
-        new VolumeUnit(VolumeUnit.CUBE_MILLIMETRE, 'cube millimetre', 'cube millimetres', 'mm³', LengthUnit.MILLIMETRE);
-        new VolumeUnit(VolumeUnit.CUBE_INCH, 'cube inch', 'cube inches', 'in³', LengthUnit.INCH);
-        new VolumeUnit(VolumeUnit.CUBE_FOOT, 'cube foot', 'cube feet', 'ft³', LengthUnit.FOOT);
-        new VolumeUnit(VolumeUnit.CUBE_YARD, 'cube yard', 'cube yards', 'yd³', LengthUnit.YARD);
-        new VolumeUnit(VolumeUnit.CUBE_MILE, 'cube mile', 'cube miles', 'mi³', LengthUnit.MILE);
+        new VolumeUnit(VolumeUnit.CUBE_METRE, 'cubic metre', 'cubic metres', 'm³', LengthUnit.METRE);
+        new VolumeUnit(VolumeUnit.CUBE_KILOMETRE, 'cubic kilometre', 'cubic kilometres', 'km³', LengthUnit.KILOMETRE);
+        new VolumeUnit(VolumeUnit.CUBE_CENTIMETRE, 'cubic centimetre', 'cubic centimetres', 'cm³', LengthUnit.CENTIMETRE);
+        new VolumeUnit(VolumeUnit.CUBE_MILLIMETRE, 'cubic millimetre', 'cubic millimetres', 'mm³', LengthUnit.MILLIMETRE);
+        new VolumeUnit(VolumeUnit.CUBE_INCH, 'cubic inch', 'cubic inches', 'in³', LengthUnit.INCH);
+        new VolumeUnit(VolumeUnit.CUBE_FOOT, 'cubic foot', 'cubic feet', 'ft³', LengthUnit.FOOT);
+        new VolumeUnit(VolumeUnit.CUBE_YARD, 'cubic yard', 'cubic yards', 'yd³', LengthUnit.YARD);
+        new VolumeUnit(VolumeUnit.CUBE_MILE, 'cubic mile', 'cubic miles', 'mi³', LengthUnit.MILE);
     }
 
     private static checkForUniqueness(newUnit: VolumeUnit): void {
