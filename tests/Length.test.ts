@@ -1,5 +1,6 @@
 import {LengthUnit} from "../src/LengthUnit";
-import {Length, LengthImmutable} from "../src/Measurements";
+import {Area, Length, LengthImmutable} from "../src/Measurements";
+import {AreaUnit} from "../src/AreaUnit";
 
 test('Addition', () => {
     const length1 = new Length(1, LengthUnit.METRE);
@@ -38,6 +39,16 @@ test('Multiplication By Length', () => {
     const area2 = length2.mulByLength(3, LengthUnit.METRE);
     expect(length2.metres).toBe(5);
     expect(area2.squareMetres).toBe(15);
+});
+
+test('Multiplication By Area', () => {
+    const length = new Length(2, LengthUnit.METRE);
+    const area = new Area(3, AreaUnit.SQUARE_METRE);
+    const volume = length.mulByArea(area);
+    expect(volume.cubeMetres).toBe(6);
+
+    const volume2 = length.mulByArea(3, AreaUnit.SQUARE_METRE);
+    expect(volume2.cubeMetres).toBe(6);
 });
 
 test('Division By Number', () => {

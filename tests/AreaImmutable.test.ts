@@ -216,3 +216,13 @@ test('Handling of non number types', () => {
     // @ts-ignore, for testing purposes
     expect(new AreaImmutable('1.5', AreaUnit.SQUARE_METRE).add('1.5', AreaUnit.SQUARE_METRE).squareMetres).toBe(3);
 });
+
+test('Multiplication By Length', () => {
+    const area = new AreaImmutable(9, AreaUnit.SQUARE_METRE);
+    const length = new LengthImmutable(3, LengthUnit.METRE);
+    const volume = area.mulByLength(length);
+    expect(volume.cubeMetres).toBe(27);
+
+    const volume2 = area.mulByLength(3, LengthUnit.METRE);
+    expect(volume2.cubeMetres).toBe(27);
+});
