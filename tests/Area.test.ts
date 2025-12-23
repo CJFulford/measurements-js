@@ -233,3 +233,13 @@ test('Conversion', () => {
     expect(Area.zero().toImmutable()).toBeInstanceOf(AreaImmutable);
     expect(AreaImmutable.zero().toMutable()).toBeInstanceOf(Area);
 });
+
+test('Multiplication By Length', () => {
+    const area = new Area(9, AreaUnit.SQUARE_METRE);
+    const length = new Length(3, LengthUnit.METRE);
+    const volume = area.mulByLength(length);
+    expect(volume.cubeMetres).toBe(27);
+
+    const volume2 = area.mulByLength(3, LengthUnit.METRE);
+    expect(volume2.cubeMetres).toBe(27);
+});
