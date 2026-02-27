@@ -596,7 +596,7 @@ export abstract class AbstractAngle extends AbstractMeasurement {
         const normalizedRadians = ((radians % twoPi) + twoPi) % twoPi;
 
         const newAngle = new Angle(normalizedRadians, AngleUnit.RADIANS);
-        
+
         return newAngle.getValue(unit);
     }
 
@@ -1465,7 +1465,7 @@ export class AngleImmutable extends AbstractAngle implements TImmutable {
     }
 
     toImmutable(): AngleImmutable {
-        return new AngleImmutable(this.radians, AngleUnit.RADIANS);
+        return this;
     }
 
     static zero(): AngleImmutable {
