@@ -33,7 +33,7 @@ export class AngleUnit {
         AngleUnit.units = [];
 
         new AngleUnit(AngleUnit.RADIANS, 1, 'radian', 'radians', 'rad', 'rad');
-        new AngleUnit(AngleUnit.DEGREES, 57.29578, 'degree', 'degrees', 'deg', '°');
+        new AngleUnit(AngleUnit.DEGREES, Math.PI / 180, 'degree', 'degrees', 'deg', '°');
     }
 
     private static checkForUniqueness(newUnit: AngleUnit): void {
