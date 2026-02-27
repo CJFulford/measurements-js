@@ -630,9 +630,9 @@ export abstract class AbstractAngle extends AbstractMeasurement {
     abstract isGreaterThanOrEqualTo(angle: number, unit: AngleUnitArg): boolean;
     abstract isGreaterThanOrEqualTo(angle: AngleArg, unit?: AngleUnitArg): boolean;
 
-    abstract toMutable(): Length;
+    abstract toMutable(): Angle;
 
-    abstract toImmutable(): LengthImmutable;
+    abstract toImmutable(): ImmutableAngle;
 
     format(decimals: number, unit: AngleUnitArg, type: lengthFormatType = "symbol"): string {
 
