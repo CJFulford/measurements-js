@@ -1,7 +1,7 @@
 ## @cjfulford/measurements-js
 
-@cjfulford/measurements-js is an npm package providing classes for handling measurements of length, area, and volume in
-various units. This package offers flexibility and ease of use for converting, manipulating, and comparing measurements.
+@cjfulford/measurements-js is an npm package providing classes for handling measurements various units. This package
+offers flexibility and ease of use for converting, manipulating, and comparing measurements.
 
 ### Installation
 
@@ -79,6 +79,32 @@ console.log(volume.isGreaterThan(1000, VolumeUnit.LITRE)); // Output: true
 
 There is also the `VolumeImmutable` class which is an immutable version of `Volume`.
 
+#### Angle
+
+Import Angle and AngleUnit from @cjfulford/measurements-js:
+
+Create an angle object:
+
+```javascript
+import {Angle, AngleUnit} from '@cjfulford/measurements-js';
+
+// Create an angle object
+const angle = new Angle(90, AngleUnit.DEGREES);
+
+// Perform operations
+const addedAngle = angle.add(45, AngleUnit.DEGREES);
+console.log(addedAngle.degrees); // Output: 135
+
+// Normalize angle
+angle.normalize();
+console.log(angle.degrees); // Output: 90 (normalized to [0, 360) degrees)
+
+// Compare angles
+console.log(angle.isGreaterThan(45, AngleUnit.DEGREES)); // Output: true
+```
+
+There is also the `AngleImmutable` class which is an immutable version of `Angle`.
+
 ### Available Units
 
 #### Length Units
@@ -112,6 +138,11 @@ There is also the `VolumeImmutable` class which is an immutable version of `Volu
 - Cubic Foot (CUBE_FOOT)
 - Cubic Yard (CUBE_YARD)
 - Cubic Mile (CUBE_MILE)
+
+#### Angle Units
+
+- Degree (DEGREES)
+- Radian (RADIANS)
 
 ### License
 
