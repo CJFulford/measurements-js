@@ -198,24 +198,13 @@ export abstract class AbstractLength extends AbstractMeasurement {
             const unit = units[i];
             const isLastUnit = i === units.length - 1;
 
-            let portion;
-            let portionDecimals;
-            if (isLastUnit) {
-                portion = remaining;
-                portionDecimals = decimals;
-            } else {
-                portion = new LengthImmutable(Math.floor(remaining.getValue(unit)), unit);
-                portionDecimals = 0;
+            let portionDecimals = isLastUnit ? decimals : 0;
+            let portion = isLastUnit ? remaining : new LengthImmutable(Math.floor(remaining.getValue(unit)), unit);
+            if (!isLastUnit) {
                 remaining = remaining.sub(portion);
-
-                if (remaining.isEqualTo(1, unit)) {
-                    portion = portion.add(1, unit);
-                    remaining = LengthImmutable.zero();
-                }
-
-                if (portion.isZero()) {
-                    continue;
-                }
+                portion = remaining.isEqualTo(1, unit) ? portion.add(1, unit) : portion;
+                remaining = remaining.isEqualTo(1, unit) ? LengthImmutable.zero() : remaining;
+                if (portion.isZero()) continue;
             }
 
             result.push(portion.format(portionDecimals, unit, type));
@@ -598,6 +587,8 @@ export abstract class AbstractAngle extends AbstractMeasurement {
         return this.getValue(AngleUnit.DEGREES);
     }
 
+    abstract normalise(): AbstractAngle;
+
     abstract add(angle: AbstractAngle): AbstractAngle;
     abstract add(angle: number, unit: AngleUnitArg): AbstractAngle;
     abstract add(angle: AngleArg, unit?: AngleUnitArg): AbstractAngle;
@@ -632,7 +623,7 @@ export abstract class AbstractAngle extends AbstractMeasurement {
 
     abstract toMutable(): Angle;
 
-    abstract toImmutable(): ImmutableAngle;
+    abstract toImmutable(): AngleImmutable;
 
     format(decimals: number, unit: AngleUnitArg, type: lengthFormatType = "symbol"): string {
 
@@ -668,7 +659,6 @@ export abstract class AbstractAngle extends AbstractMeasurement {
                 ? 0
                 : this.isLessThan(angle) ? -1 : 1;
         }
-
         return this.compare(new Angle(angle, unit as AngleUnitArg));
     }
 }
@@ -1306,3 +1296,168 @@ export class VolumeImmutable extends AbstractVolume implements TImmutable {
     }
 }
 
+export class Angle extends AbstractAngle implements TMutable {
+    constructor(value: number, unit: AngleUnitArg) {
+        super(value, unit);
+    }
+
+    normalise(): AbstractAngle {
+        const fullRotation = 2 * Math.PI;
+        this.value = ((this.radians % fullRotation) + fullRotation) % fullRotation;
+        return this;
+    }
+
+    add(angle: AbstractAngle): AbstractAngle;
+    add(angle: number, unit: AngleUnitArg): AbstractAngle;
+    add(angle: AngleArg, unit?: AngleUnitArg): AbstractAngle {
+        const a = angle instanceof AbstractAngle ? angle : new Angle(angle, unit as AngleUnitArg);
+        this.value += a.getValue(this.unit);
+        return this;
+    }
+
+    sub(angle: AbstractAngle): AbstractAngle;
+    sub(angle: number, unit: AngleUnitArg): AbstractAngle;
+    sub(angle: AngleArg, unit?: AngleUnitArg): AbstractAngle {
+        const a = angle instanceof AbstractAngle ? angle : new Angle(angle, unit as AngleUnitArg);
+        this.value -= a.getValue(this.unit);
+        return this;
+    }
+
+    mulByNumber(value: number): AbstractAngle {
+        this.value *= value;
+        return this;
+    }
+
+    divByNumber(value: number): AbstractAngle {
+        this.value /= value;
+        return this;
+    }
+
+    isEqualTo(angle: AbstractAngle): boolean;
+    isEqualTo(angle: number, unit: AngleUnitArg): boolean;
+    isEqualTo(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new Angle(angle, unit as AngleUnitArg);
+        return floatsEqual(this.radians, a.radians);
+    }
+
+    isLessThan(angle: AbstractAngle): boolean;
+    isLessThan(angle: number, unit: AngleUnitArg): boolean;
+    isLessThan(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new Angle(angle, unit as AngleUnitArg);
+        return this.radians < a.radians && !this.isEqualTo(a);
+    }
+
+    isLessThanOrEqualTo(angle: AbstractAngle): boolean;
+    isLessThanOrEqualTo(angle: number, unit: AngleUnitArg): boolean;
+    isLessThanOrEqualTo(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new Angle(angle, unit as AngleUnitArg);
+        return this.radians < a.radians || this.isEqualTo(a);
+    }
+
+    isGreaterThan(angle: AbstractAngle): boolean;
+    isGreaterThan(angle: number, unit: AngleUnitArg): boolean;
+    isGreaterThan(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new Angle(angle, unit as AngleUnitArg);
+        return this.radians > a.radians && !this.isEqualTo(a);
+    }
+
+    isGreaterThanOrEqualTo(angle: AbstractAngle): boolean;
+    isGreaterThanOrEqualTo(angle: number, unit: AngleUnitArg): boolean;
+    isGreaterThanOrEqualTo(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new Angle(angle, unit as AngleUnitArg);
+        return this.radians > a.radians || this.isEqualTo(a);
+    }
+
+    toMutable(): Angle {
+        return new Angle(this.radians, AngleUnit.RADIANS);
+    }
+
+    toImmutable(): AngleImmutable {
+        return new AngleImmutable(this.radians, AngleUnit.RADIANS);
+    }
+
+    static zero(): Angle {
+        return new Angle(0, AngleUnit.RADIANS);
+    }
+}
+
+export class AngleImmutable extends AbstractAngle implements TImmutable {
+    constructor(value: number, unit: AngleUnitArg) {
+        super(value, unit);
+    }
+
+    normalise(): AbstractAngle {
+        const fullRotation = 2 * Math.PI;
+        const normalisedValue = ((this.radians % fullRotation) + fullRotation) % fullRotation;
+        return new AngleImmutable(normalisedValue, AngleUnit.RADIANS);
+    }
+
+    add(angle: AbstractAngle): AbstractAngle;
+    add(angle: number, unit: AngleUnitArg): AbstractAngle;
+    add(angle: AngleArg, unit?: AngleUnitArg): AbstractAngle {
+        const a = angle instanceof AbstractAngle ? angle : new AngleImmutable(angle, unit as AngleUnitArg);
+        return new AngleImmutable(this.value + a.getValue(this.unit), this.unit);
+    }
+
+    sub(angle: AbstractAngle): AbstractAngle;
+    sub(angle: number, unit: AngleUnitArg): AbstractAngle;
+    sub(angle: AngleArg, unit?: AngleUnitArg): AbstractAngle {
+        const a = angle instanceof AbstractAngle ? angle : new AngleImmutable(angle, unit as AngleUnitArg);
+        return new AngleImmutable(this.value - a.getValue(this.unit), this.unit);
+    }
+
+    mulByNumber(value: number): AbstractAngle {
+        return new AngleImmutable(this.value * value, this.unit);
+    }
+
+    divByNumber(value: number): AbstractAngle {
+        return new AngleImmutable(this.value / value, this.unit);
+    }
+
+    isEqualTo(angle: AbstractAngle): boolean;
+    isEqualTo(angle: number, unit: AngleUnitArg): boolean;
+    isEqualTo(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new AngleImmutable(angle, unit as AngleUnitArg);
+        return floatsEqual(this.radians, a.radians);
+    }
+
+    isLessThan(angle: AbstractAngle): boolean;
+    isLessThan(angle: number, unit: AngleUnitArg): boolean;
+    isLessThan(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new AngleImmutable(angle, unit as AngleUnitArg);
+        return this.radians < a.radians && !this.isEqualTo(a);
+    }
+
+    isLessThanOrEqualTo(angle: AbstractAngle): boolean;
+    isLessThanOrEqualTo(angle: number, unit: AngleUnitArg): boolean;
+    isLessThanOrEqualTo(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new AngleImmutable(angle, unit as AngleUnitArg);
+        return this.radians < a.radians || this.isEqualTo(a);
+    }
+
+    isGreaterThan(angle: AbstractAngle): boolean;
+    isGreaterThan(angle: number, unit: AngleUnitArg): boolean;
+    isGreaterThan(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new AngleImmutable(angle, unit as AngleUnitArg);
+        return this.radians > a.radians && !this.isEqualTo(a);
+    }
+
+    isGreaterThanOrEqualTo(angle: AbstractAngle): boolean;
+    isGreaterThanOrEqualTo(angle: number, unit: AngleUnitArg): boolean;
+    isGreaterThanOrEqualTo(angle: AngleArg, unit?: AngleUnitArg): boolean {
+        const a = angle instanceof AbstractAngle ? angle : new AngleImmutable(angle, unit as AngleUnitArg);
+        return this.radians > a.radians || this.isEqualTo(a);
+    }
+
+    toMutable(): Angle {
+        return new Angle(this.radians, AngleUnit.RADIANS);
+    }
+
+    toImmutable(): AngleImmutable {
+        return new AngleImmutable(this.radians, AngleUnit.RADIANS);
+    }
+
+    static zero(): AngleImmutable {
+        return new AngleImmutable(0, AngleUnit.RADIANS);
+    }
+}
