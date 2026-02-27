@@ -587,7 +587,20 @@ export abstract class AbstractAngle extends AbstractMeasurement {
         return this.getValue(AngleUnit.DEGREES);
     }
 
-    abstract normalise(): AbstractAngle;
+    static normalize(value: number, unit: AngleUnitArg): number {
+        unit = unit instanceof AngleUnit ? unit : AngleUnit.getById(unit as number);
+        const angle = new Angle(value, unit);
+        const radians = angle.radians;
+
+        const twoPi = 2 * Math.PI;
+        const normalizedRadians = ((radians % twoPi) + twoPi) % twoPi;
+
+        const newAngle = new Angle(normalizedRadians, AngleUnit.RADIANS);
+        
+        return newAngle.getValue(unit);
+    }
+
+    abstract normalize(): AbstractAngle;
 
     abstract add(angle: AbstractAngle): AbstractAngle;
     abstract add(angle: number, unit: AngleUnitArg): AbstractAngle;
@@ -1301,9 +1314,8 @@ export class Angle extends AbstractAngle implements TMutable {
         super(value, unit);
     }
 
-    normalise(): AbstractAngle {
-        const fullRotation = 2 * Math.PI;
-        this.value = ((this.radians % fullRotation) + fullRotation) % fullRotation;
+    normalize(): AbstractAngle {
+        this.value = AbstractAngle.normalize(this.value, this.unit);
         return this;
     }
 
@@ -1386,10 +1398,9 @@ export class AngleImmutable extends AbstractAngle implements TImmutable {
         super(value, unit);
     }
 
-    normalise(): AbstractAngle {
-        const fullRotation = 2 * Math.PI;
-        const normalisedValue = ((this.radians % fullRotation) + fullRotation) % fullRotation;
-        return new AngleImmutable(normalisedValue, AngleUnit.RADIANS);
+    normalize(): AbstractAngle {
+        const normalizedValue = AbstractAngle.normalize(this.value, this.unit);
+        return new AngleImmutable(normalizedValue, this.unit);
     }
 
     add(angle: AbstractAngle): AbstractAngle;
