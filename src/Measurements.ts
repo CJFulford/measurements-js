@@ -324,6 +324,14 @@ export abstract class AbstractArea extends AbstractMeasurement {
     abstract isGreaterThanOrEqualTo(area: number, unit: AreaUnitArg): boolean;
     abstract isGreaterThanOrEqualTo(area: AreaArg, unit?: AreaUnitArg): boolean;
 
+    abstract min(area: AbstractArea): AbstractArea;
+    abstract min(area: number, unit: AreaUnitArg): AbstractArea;
+    abstract min(area: AreaArg, unit?: AreaUnitArg): AbstractArea;
+
+    abstract max(area: AbstractArea): AbstractArea;
+    abstract max(area: number, unit: AreaUnitArg): AbstractArea;
+    abstract max(area: AreaArg, unit?: AreaUnitArg): AbstractArea;
+
     abstract toMutable(): Area;
 
     abstract toImmutable(): AreaImmutable;
@@ -493,6 +501,14 @@ export abstract class AbstractVolume extends AbstractMeasurement {
     abstract isGreaterThanOrEqualTo(volume: AbstractVolume): boolean;
     abstract isGreaterThanOrEqualTo(volume: number, unit: VolumeUnitArg): boolean;
     abstract isGreaterThanOrEqualTo(volume: VolumeArg, unit?: VolumeUnitArg): boolean;
+
+    abstract min(volume: AbstractVolume): AbstractVolume;
+    abstract min(volume: number, unit: VolumeUnitArg): AbstractVolume;
+    abstract min(volume: VolumeArg, unit?: VolumeUnitArg): AbstractVolume;
+
+    abstract max(volume: AbstractVolume): AbstractVolume;
+    abstract max(volume: number, unit: VolumeUnitArg): AbstractVolume;
+    abstract max(volume: VolumeArg, unit?: VolumeUnitArg): AbstractVolume;
 
     abstract toMutable(): Volume;
 
@@ -1043,6 +1059,30 @@ export class Area extends AbstractArea implements TMutable {
             : this.isGreaterThanOrEqualTo(new Area(area, unit as AreaUnitArg));
     }
 
+    min(area: AbstractArea): Area;
+    min(area: number, unit: AreaUnitArg): Area;
+    min(area: AreaArg, unit?: AreaUnitArg): Area {
+        if (!(area instanceof AbstractArea)) {
+            return this.min(new Area(area, unit as AreaUnitArg));
+        }
+
+        this.value = Math.min(this.value, area.getValue(this.unit));
+
+        return this;
+    }
+
+    max(area: AbstractArea): Area;
+    max(area: number, unit: AreaUnitArg): Area;
+    max(area: AreaArg, unit?: AreaUnitArg): Area {
+        if (!(area instanceof AbstractArea)) {
+            return this.max(new Area(area, unit as AreaUnitArg));
+        }
+
+        this.value = Math.max(this.value, area.getValue(this.unit));
+
+        return this;
+    }
+
     toMutable(): Area {
         return new Area(this.value, this.unit);
     }
@@ -1150,6 +1190,22 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
             : this.isGreaterThanOrEqualTo(new AreaImmutable(area, unit as AreaUnitArg));
     }
 
+    min(area: AbstractArea): AreaImmutable;
+    min(area: number, unit: AreaUnitArg): AreaImmutable;
+    min(area: AreaArg, unit?: AreaUnitArg): AreaImmutable {
+        return area instanceof AbstractArea
+            ? (this.isLessThan(area) ? this : area.toImmutable())
+            : this.min(new AreaImmutable(area, unit as AreaUnitArg));
+    }
+
+    max(area: AbstractArea): AreaImmutable;
+    max(area: number, unit: AreaUnitArg): AreaImmutable;
+    max(area: AreaArg, unit?: AreaUnitArg): AreaImmutable {
+        return area instanceof AbstractArea
+            ? (this.isGreaterThan(area) ? this : area.toImmutable())
+            : this.min(new AreaImmutable(area, unit as AreaUnitArg));
+    }
+
     toMutable(): Area {
         return new Area(this.value, this.unit);
     }
@@ -1250,6 +1306,30 @@ export class Volume extends AbstractVolume implements TMutable {
         return this.isGreaterThan(v) || this.isEqualTo(v);
     }
 
+    min(volume: AbstractVolume): Volume;
+    min(volume: number, unit: VolumeUnitArg): Volume;
+    min(volume: VolumeArg, unit?: VolumeUnitArg): Volume {
+        if (!(volume instanceof AbstractVolume)) {
+            return this.min(new Volume(volume, unit as VolumeUnitArg));
+        }
+
+        this.value = Math.min(this.value, volume.getValue(this.unit));
+
+        return this;
+    }
+
+    max(volume: AbstractVolume): Volume;
+    max(volume: number, unit: VolumeUnitArg): Volume;
+    max(volume: VolumeArg, unit?: VolumeUnitArg): Volume {
+        if (!(volume instanceof AbstractVolume)) {
+            return this.max(new Volume(volume, unit as VolumeUnitArg));
+        }
+
+        this.value = Math.max(this.value, volume.getValue(this.unit));
+
+        return this;
+    }
+
     toMutable(): Volume {
         return new Volume(this.value, this.unit);
     }
@@ -1344,6 +1424,22 @@ export class VolumeImmutable extends AbstractVolume implements TImmutable {
     isGreaterThanOrEqualTo(volume: VolumeArg, unit?: VolumeUnitArg): boolean {
         const v = volume instanceof AbstractVolume ? volume : new VolumeImmutable(volume, unit as VolumeUnitArg);
         return this.isGreaterThan(v) || this.isEqualTo(v);
+    }
+
+    min(volume: AbstractVolume): VolumeImmutable;
+    min(volume: number, unit: VolumeUnitArg): VolumeImmutable;
+    min(volume: VolumeArg, unit?: VolumeUnitArg): VolumeImmutable {
+        return volume instanceof AbstractVolume
+            ? (this.isLessThan(volume) ? this : volume.toImmutable())
+            : this.min(new VolumeImmutable(volume, unit as VolumeUnitArg));
+    }
+
+    max(volume: AbstractVolume): VolumeImmutable;
+    max(volume: number, unit: VolumeUnitArg): VolumeImmutable;
+    max(volume: VolumeArg, unit?: VolumeUnitArg): VolumeImmutable {
+        return volume instanceof AbstractVolume
+            ? (this.isGreaterThan(volume) ? this : volume.toImmutable())
+            : this.max(new VolumeImmutable(volume, unit as VolumeUnitArg));
     }
 
     toMutable(): Volume {
