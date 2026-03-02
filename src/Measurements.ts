@@ -646,7 +646,7 @@ export abstract class AbstractAngle extends AbstractMeasurement {
 
     abstract toImmutable(): AngleImmutable;
 
-    format(decimals: number, unit: AngleUnitArg, type: lengthFormatType = "symbol"): string {
+    format(decimals: number, unit: AngleUnitArg, type: angleFormatType = "symbol"): string {
 
         const format = '0,0' + (decimals > 0 ? '.' + '0'.repeat(decimals) : '');
 
