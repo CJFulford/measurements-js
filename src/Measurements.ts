@@ -154,6 +154,14 @@ export abstract class AbstractLength extends AbstractMeasurement {
     abstract isGreaterThanOrEqualTo(length: number, unit: LengthUnitArg): boolean;
     abstract isGreaterThanOrEqualTo(length: LengthArg, unit?: LengthUnitArg): boolean;
 
+    abstract min(length: AbstractLength): AbstractLength;
+    abstract min(length: number, unit: LengthUnitArg): AbstractLength;
+    abstract min(length: LengthArg, unit?: LengthUnitArg): AbstractLength;
+
+    abstract max(length: AbstractLength): AbstractLength;
+    abstract max(length: number, unit: LengthUnitArg): AbstractLength;
+    abstract max(length: LengthArg, unit?: LengthUnitArg): AbstractLength;
+
     abstract toMutable(): Length;
 
     abstract toImmutable(): LengthImmutable;
@@ -774,6 +782,32 @@ export class Length extends AbstractLength implements TMutable {
             : this.isGreaterThanOrEqualTo(new Length(length, unit as LengthUnitArg));
     }
 
+    min(length: AbstractLength): Length;
+    min(length: number, unit: LengthUnitArg): Length;
+    min(length: LengthArg, unit?: LengthUnitArg): Length {
+
+        if (!(length instanceof AbstractLength)) {
+            return this.min(new Length(length, unit as LengthUnitArg));
+        }
+
+        this.value = Math.min(this.value, length.getValue(this.unit));
+
+        return this;
+    }
+
+    max(length: AbstractLength): Length;
+    max(length: number, unit: LengthUnitArg): Length;
+    max(length: LengthArg, unit?: LengthUnitArg): Length {
+        if (!(length instanceof AbstractLength)) {
+            return this.min(new Length(length, unit as LengthUnitArg));
+        }
+
+        this.value = Math.max(this.value, length.getValue(this.unit));
+
+        return this;
+
+    }
+
     toMutable(): Length {
         return new Length(this.value, this.unit);
     }
@@ -881,6 +915,22 @@ export class LengthImmutable extends AbstractLength implements TImmutable {
         return length instanceof AbstractLength
             ? this.isGreaterThan(length) || this.isEqualTo(length)
             : this.isGreaterThanOrEqualTo(new LengthImmutable(length, unit as LengthUnitArg));
+    }
+
+    min(length: AbstractLength): LengthImmutable;
+    min(length: number, unit: LengthUnitArg): LengthImmutable;
+    min(length: LengthArg, unit?: LengthUnitArg): LengthImmutable {
+        return length instanceof AbstractLength
+            ? (this.isLessThan(length) ? this : length.toImmutable())
+            : this.min(new LengthImmutable(length, unit as LengthUnitArg));
+    }
+
+    max(length: AbstractLength): LengthImmutable;
+    max(length: number, unit: LengthUnitArg): LengthImmutable;
+    max(length: LengthArg, unit?: LengthUnitArg): LengthImmutable {
+        return length instanceof AbstractLength
+            ? (this.isGreaterThan(length) ? this : length.toImmutable())
+            : this.min(new LengthImmutable(length, unit as LengthUnitArg));
     }
 
     toMutable(): Length {
