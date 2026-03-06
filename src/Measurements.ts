@@ -162,6 +162,8 @@ export abstract class AbstractLength extends AbstractMeasurement {
     abstract max(length: number, unit: LengthUnitArg): AbstractLength;
     abstract max(length: LengthArg, unit?: LengthUnitArg): AbstractLength;
 
+    abstract abs(): AbstractLength;
+
     abstract toMutable(): Length;
 
     abstract toImmutable(): LengthImmutable;
@@ -331,6 +333,8 @@ export abstract class AbstractArea extends AbstractMeasurement {
     abstract max(area: AbstractArea): AbstractArea;
     abstract max(area: number, unit: AreaUnitArg): AbstractArea;
     abstract max(area: AreaArg, unit?: AreaUnitArg): AbstractArea;
+
+    abstract abs(): AbstractArea;
 
     abstract toMutable(): Area;
 
@@ -510,6 +514,8 @@ export abstract class AbstractVolume extends AbstractMeasurement {
     abstract max(volume: number, unit: VolumeUnitArg): AbstractVolume;
     abstract max(volume: VolumeArg, unit?: VolumeUnitArg): AbstractVolume;
 
+    abstract abs(): AbstractVolume;
+
     abstract toMutable(): Volume;
 
     abstract toImmutable(): VolumeImmutable;
@@ -657,6 +663,8 @@ export abstract class AbstractAngle extends AbstractMeasurement {
     abstract isGreaterThanOrEqualTo(angle: AbstractAngle): boolean;
     abstract isGreaterThanOrEqualTo(angle: number, unit: AngleUnitArg): boolean;
     abstract isGreaterThanOrEqualTo(angle: AngleArg, unit?: AngleUnitArg): boolean;
+
+    abstract abs(): AbstractAngle;
 
     abstract toMutable(): Angle;
 
@@ -821,7 +829,11 @@ export class Length extends AbstractLength implements TMutable {
         this.value = Math.max(this.value, length.getValue(this.unit));
 
         return this;
+    }
 
+    abs(): Length {
+        this.value = Math.abs(this.value);
+        return this;
     }
 
     toMutable(): Length {
@@ -947,6 +959,10 @@ export class LengthImmutable extends AbstractLength implements TImmutable {
         return length instanceof AbstractLength
             ? (this.isGreaterThan(length) ? this : length.toImmutable())
             : this.min(new LengthImmutable(length, unit as LengthUnitArg));
+    }
+
+    abs(): LengthImmutable {
+        return new LengthImmutable(Math.abs(this.value), this.unit);
     }
 
     toMutable(): Length {
@@ -1083,6 +1099,11 @@ export class Area extends AbstractArea implements TMutable {
         return this;
     }
 
+    abs(): Area {
+        this.value = Math.abs(this.value);
+        return this;
+    }
+
     toMutable(): Area {
         return new Area(this.value, this.unit);
     }
@@ -1204,6 +1225,10 @@ export class AreaImmutable extends AbstractArea implements TImmutable {
         return area instanceof AbstractArea
             ? (this.isGreaterThan(area) ? this : area.toImmutable())
             : this.min(new AreaImmutable(area, unit as AreaUnitArg));
+    }
+
+    abs(): AreaImmutable {
+        return new AreaImmutable(Math.abs(this.value), this.unit);
     }
 
     toMutable(): Area {
@@ -1330,6 +1355,11 @@ export class Volume extends AbstractVolume implements TMutable {
         return this;
     }
 
+    abs(): Volume {
+        this.value = Math.abs(this.value);
+        return this;
+    }
+
     toMutable(): Volume {
         return new Volume(this.value, this.unit);
     }
@@ -1442,6 +1472,10 @@ export class VolumeImmutable extends AbstractVolume implements TImmutable {
             : this.max(new VolumeImmutable(volume, unit as VolumeUnitArg));
     }
 
+    abs(): VolumeImmutable {
+        return new VolumeImmutable(Math.abs(this.value), this.unit);
+    }
+
     toMutable(): Volume {
         return new Volume(this.value, this.unit);
     }
@@ -1526,6 +1560,11 @@ export class Angle extends AbstractAngle implements TMutable {
         return this.radians > a.radians || this.isEqualTo(a);
     }
 
+    abs(): Angle {
+        this.value = Math.abs(this.value);
+        return this;
+    }
+
     toMutable(): Angle {
         return new Angle(this.radians, AngleUnit.RADIANS);
     }
@@ -1604,6 +1643,10 @@ export class AngleImmutable extends AbstractAngle implements TImmutable {
     isGreaterThanOrEqualTo(angle: AngleArg, unit?: AngleUnitArg): boolean {
         const a = angle instanceof AbstractAngle ? angle : new AngleImmutable(angle, unit as AngleUnitArg);
         return this.radians > a.radians || this.isEqualTo(a);
+    }
+
+    abs(): AngleImmutable {
+        return new AngleImmutable(Math.abs(this.value), this.unit);
     }
 
     toMutable(): Angle {
